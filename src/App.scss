@@ -5,12 +5,12 @@
     grid-template-columns: 1fr 4fr;
     min-height: 100vh;
 }
+
 .div1 {
-    margin-right: 5px;
-    padding: 100px;
+    margin-right: 4px;
     border-color: colors.$orange;
-    border-width: 3px;
-    background-color: colors.$orange;
+    border-width: 2px;
+    background: #b6eaff;
     height: 100vh;
     box-sizing: border-box;
 }

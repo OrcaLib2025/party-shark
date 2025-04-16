@@ -1,36 +1,32 @@
-
 import { Route, Routes } from 'react-router-dom';
 import "./App.scss";
 import SideMenu from './components/SideMenu';
+import { Suspense } from 'react';
+import { Map } from './pages/Map';
 
 function App() {
-  // const navigation = useNavigate();
-
-  // const handleHomePage = () => {
-  //   void navigation("/");
-  // }
-  // const handleErrorPage = () => {
-  //   void navigation("/bebebesbababa");
-  // }
-  // const handleGroupsPage = () => {
-  //   void navigation("/groups");
-  // }
+  const isAuth = false;
 
   return(
     <div className='wrapper'>
-      <SideMenu/>
-      {/* <div role="presentation" className='button' onClick={handleHomePage} />
-      <div role="presentation" className='button' onClick={handleErrorPage} />
-      <div role="presentation" className='button' onClick={handleGroupsPage} /> */}
-      <div className = 'div1'>
+      <SideMenu />
+
+      <div className='div1'>
         <Routes>
-          <Route path="/" element={<div className=''>1</div>}/>
-          <Route path="*" element={<div>Egor #404 Page Not Found</div>}/>
-          <Route path="/groups" element={<div>Pupsya</div>}/>
+          <Route path="/" element={<Suspense><div className=''>1</div></Suspense>}/>
+          <Route path="*" element={<Suspense><div>Egor #404 Page Not Found</div></Suspense>}/>
+          <Route path="/map" element={<Suspense><Map /></Suspense>} />
+          <Route path="/groups" element={<Suspense><div>Pupsya</div></Suspense>}/>
+
+          {
+            isAuth ? (
+                <Route path='/profile' element={<div>Profile</div>} />
+              ) : undefined
+          }
         </Routes>
       </div>
     </div>
   );
 }
 
-export default App
+export default App;

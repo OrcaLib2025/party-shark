@@ -1,1 +1,0 @@
-export { SideMenuOld as default } from './SideMenuOld';

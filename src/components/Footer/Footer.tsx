@@ -1,6 +1,10 @@
-import { PropsWithChildren } from "react";
+import React from "react";
 
-export const Footer=({children}: PropsWithChildren) => {
+interface FooterProps {
+    children: React.ReactNode,
+}
+
+export const Footer: React.FC<FooterProps>=({children}) => {
     return(
         <footer>
             <p>&copy; {new Date().getFullYear()} Your Website Name</p>
@@ -9,4 +13,4 @@ export const Footer=({children}: PropsWithChildren) => {
     );
 }
 
-export default Footer
+export default Footer;
