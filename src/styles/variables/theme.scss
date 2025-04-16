@@ -1,0 +1,30 @@
+/* ========== Светлая тема ========== */
+:root {
+    /* Текст */
+    --text-primary: #{$text-primary};
+    --text-primary-light: #{$text-primary-light};
+    --text-secondary: #{$text-secondary};
+    
+    /* Фоны */
+    --background-primary: #{$background-primary};
+    --background-secondary: #{$background-secondary};
+    
+    /* Акцентные цвета */
+    --primary: #{$blue};
+    --primary-light: #{$blue-light};
+  }
+  
+  /* ========== Темная тема ========== */
+  [data-theme='dark'] {
+    /* Текст */
+    --text-primary: #{$dark-text-primary};
+    --text-primary-light: #{$text-primary-light};
+    
+    /* Фоны */
+    --background-primary: #{$dark-background-primary};
+    --background-secondary: #{$dark-background-secondary};
+    
+    /* Акцентные цвета */
+    --primary: #{$blue-light};
+    --primary-light: #{$blue};
+  }

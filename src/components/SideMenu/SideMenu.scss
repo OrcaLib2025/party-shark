@@ -1,0 +1,81 @@
+@use '/src/styles/variables/colors';
+
+
+.menu-overview {
+    height: auto;
+}
+
+.menu {
+    background: colors.$background-primary;
+    grid-row-start: 1;
+    grid-column-start: 1;
+    min-height: 100%;
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-column: 1;
+    grid-template-rows: repeat(15, 1fr);
+}
+.header {
+    border-bottom: 4px solid black;
+    box-sizing: border-box;
+    border-width: 4px;
+    display: flex;
+    align-items: center;
+    grid-row: span 2;
+    width: 100%;
+    padding: 15px 15px 15px 30px;
+}
+.header h1 {    
+    left: 2rem;
+    padding-left: 4rem;
+    color: colors.$blue-deep;
+    font-size: 2rem;
+    margin: 1rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, colors.$blue-deep 0%, colors.$blue-light 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    color: transparent;
+    display: inline-block;
+  }
+
+  .button {
+    box-sizing: border-box;
+    border: none;
+    border-left: 4px solid colors.$blue-light;
+    padding: 0 30px;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    color: colors.$text-primary;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    
+    &:hover {
+        background: colors.$lightest-blue;
+        color: colors.$blue-deep;
+        border-left: 4px solid colors.$blue-deep;
+        transform: translateX(5px);
+    }
+    
+    &:active {
+        background: colors.$light-blue;
+        transform: translateX(5px) scale(0.98);
+    }
+    
+    // Для активной (выбранной) кнопки
+    &.active {
+        background: colors.$lightest-blue;
+        color: colors.$blue-deep;
+        border-left: 4px solid colors.$blue-deep;
+        font-weight: 600;
+    }
+}
