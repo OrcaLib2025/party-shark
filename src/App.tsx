@@ -3,6 +3,7 @@ import "./App.scss";
 import SideMenu from './components/SideMenu';
 import { Suspense } from 'react';
 import { Map } from './pages/Map';
+import { Chat } from './pages/Chat';
 
 function App() {
   const isAuth = false;
@@ -14,7 +15,7 @@ function App() {
       <div className='div1'>
         <Routes>
           <Route path="/" element={<Suspense><div className=''>1</div></Suspense>}/>
-          <Route path="*" element={<Suspense><div>Egor #404 Page Not Found</div></Suspense>}/>
+          <Route path="/chat" element={<Suspense><Chat /></Suspense>}/>
           <Route path="/map" element={<Suspense><Map /></Suspense>} />
           <Route path="/groups" element={<Suspense><div>Pupsya</div></Suspense>}/>
 

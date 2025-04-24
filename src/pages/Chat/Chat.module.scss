@@ -1,0 +1,39 @@
+@use '/src/styles/variables/colors';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    border: 1px solid colors.$blue;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto;
+    background: linear-gradient(
+    135deg,
+    rgba(colors.$background-primary, 1) 30%,
+    rgba(colors.$blue-light, 0.7) 50%,
+    rgba(colors.$blue, 0.9) 100%
+  );
+  
+  // Тонкий узор с якорями (ваш)
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'%3E%3Cpath fill='%23022aad' fill-opacity='0.09' d='M14 16H9v-2h5V9.87a4 4 0 1 1 2 0V14h5v2h-5v15.95A10 10 0 0 0 23.66 27l-3.46-2 8.2-2.2-2.9 5a12 12 0 0 1-21 0l-2.89-5 8.2 2.2-3.47 2A10 10 0 0 0 14 31.95V16zm40 40h-5v-2h5v-4.13a4 4 0 1 1 2 0V54h5v2h-5v15.95A10 10 0 0 0 63.66 67l-3.47-2 8.2-2.2-2.88 5a12 12 0 0 1-21.02 0l-2.88-5 8.2 2.2-3.47 2A10 10 0 0 0 54 71.95V56zm-39 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm40-40a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm40 40a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'%3E%3C/path%3E%3C/svg%3E"),
+                  // Добавляем волны
+                  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 320'%3E%3Cpath fill='%23022aad' fill-opacity='0.03' d='M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+  
+  background-attachment: fixed, scroll;
+  background-size: 120px 120px, cover;
+  background-position: center, bottom;
+  background-repeat: repeat, no-repeat;
+  
+  // Эффект "бумаги" для лучшей читаемости сообщений
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(colors.$text-primary-light, 0.03);
+    pointer-events: none;
+  }
+}

@@ -44,3 +44,17 @@ $dark-accent: #3b3b3b;
 $dark-accent-light: #5a5a5a;
 $dark-border: #333333;
 $footer-dark: #16192c;
+
+/* Цвета для чата */
+$chat-accent: $blue-light;          // Акцентный цвет чата
+$chat-accent-soft: rgba($blue-light, 0.15); // Мягкий акцент
+$header-gradient-start: $blue-deep; // Начало градиента
+$header-gradient-end: #0038a0;             // Новый оттенок между blue-deep и blue-dark
+$status-indicator: #00e676;                // Ярко-зеленый для лучшей видимости статуса
+$badge-bg: rgba($blue-icon, 0.25);  // Фон бейджа
+
+// Переменные для сообщений
+$current-user-bg: linear-gradient(135deg, $blue 0%, $blue-icon 100%);
+$other-user-bg: rgba($lightest-blue, 0.95);
+$current-user-shadow: 0 2px 8px rgba($blue, 0.3);
+$other-user-shadow: 0 2px 6px rgba($blue-deep, 0.1);

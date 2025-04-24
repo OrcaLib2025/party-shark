@@ -12,8 +12,8 @@ export const SideMenu = () => {
         void navigation("/bebebesbababa");
     };
 
-    const handleGroupsPage = () => {
-        void navigation("/groups");
+    const handleChatPage = () => {
+        void navigation("/chat");
     };
 
     const handleMapPage = () => {
@@ -28,7 +28,7 @@ export const SideMenu = () => {
                 </div>
                 <div className='button' onClick={handleHomePage}>Главная</div>
                 <div className='button' onClick={handleMapPage}>Карта</div>
-                <div className='button' onClick={handleGroupsPage}>Чаты</div>
+                <div className='button' onClick={handleChatPage}>Чаты</div>
                 <div className='button' onClick={handleHomePage}>Мероприятия</div>
                 <div className='button' onClick={handleErrorPage}>Настройки</div>
             </div>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@pbe/react-yandex-maps": "^1.2.5",
     "orcalib-ui-kit": "^0.1.6",
+    "partyshark-ui-kit": "^0.0.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-pro-sidebar": "^1.1.0",
