@@ -1,13 +1,24 @@
-export interface MarkerData {
-    id: number;
-    coordinates: [number, number];
-    title: string;
-    description: string;
-    photo?: string;
-    author: string;
-    date: string;
+export interface IParty {
+    id?: string;
+    img?: string;
+    title?: string;
+    description?: string;
+    members?: string[];
+    geoPoint?: number[];
+    isActive?: boolean;
+    createdAt?: Date;
+    endDate?: Date;
+    timeSlots?: {
+        start: Date;
+        end: Date;
+    }[];
+    maxMembers?: number;
+    membersCount?: number;
+    tags?: string[];
+    isPaid?: boolean;
+    author?: string;
 }
 
 export interface Marker {
-    data: MarkerData;
+    data: IParty;
 }

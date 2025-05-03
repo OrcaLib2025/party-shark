@@ -1,153 +1,185 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from 'react';
-import { YMaps, Map as YaMap, ObjectManager } from '@pbe/react-yandex-maps';
-
+import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L, { LatLng } from 'leaflet';
+import { IParty } from '../../utils/models/MarkerData';
 import cl from './Map.module.scss';
-import { MarkerData } from '../../utils/models/MarkerData';
 import { SideMarkInfo } from '../../components/SideMarkInfo';
+import { Modal } from 'orcalib-ui-kit';
 
-const escapeHtml = (unsafe: string) =>
-  unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+const customIcon = new L.Icon({
+  iconUrl: '/icons/marker.svg', // Если найдем метку получше, менять здесь
+  iconSize: [40, 56],
+  iconAnchor: [12, 41],
+  popupAnchor: [0, -41],
+});
 
-const generateBalloonContent = (data: MarkerData) => `
-  <div class="${cl['balloon-content']}">
-    ${data.photo ? `<img src="${data.photo}" class="${cl['balloon-photo']}" />` : ''}
-    <h3>${escapeHtml(data.title)}</h3>
-    <p>${escapeHtml(data.description)}</p>
-    <div class="${cl['balloon-footer']}">
-      <span>Автор: ${escapeHtml(data.author)}</span>
-      <span>Дата: ${new Date(data.date).toLocaleDateString()}</span>
-    </div>
-    <button 
-      class="${cl['balloon-button']}"
-      onclick="window.handleMarkerClick()"
+const mapContainerStyle = {
+  width: '100%',
+  height: '900px',
+};
+
+const defaultCenter: [number, number] = [55, 73.36];
+
+const markersData: IParty[] = [
+  {
+    id: '1',
+    geoPoint: [55, 73.36],
+    title: 'Объект 1',
+    description: 'Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ТекстТекст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ТекстТекст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ТекстТекст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ',
+    author: 'Иван Иванов',
+    createdAt: new Date(),
+    img: 'img/Seat.svg',
+  },
+];
+
+interface ContextMenuState {
+  coords: [number, number];
+  latlng: [number, number];
+  isActive: boolean;
+}
+
+const MapEvents: React.FC<{
+  setContextMenu: React.Dispatch<React.SetStateAction<ContextMenuState>>;
+}> = ({ setContextMenu }) => {
+  const map = useMapEvents({
+    contextmenu(e: { latlng: LatLng; originalEvent: MouseEvent }) {
+      const point = map.latLngToContainerPoint(e.latlng);
+      const container = map.getContainer();
+      const rect = container.getBoundingClientRect();
+      setContextMenu({
+        coords: [rect.top + point.y, rect.left + point.x],
+        latlng: [e.latlng.lat, e.latlng.lng],
+        isActive: true,
+      });
+    },
+    click() {
+      setContextMenu({ coords: [0, 0], latlng: [0, 0], isActive: false });
+    },
+  });
+  return null;
+};
+
+const MarkerWithZoom: React.FC<{
+  marker: IParty;
+  setActiveMarkerId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ marker, setActiveMarkerId, setShowInfo }) => {
+  const map = useMap();
+  if (!marker.geoPoint) return;
+  return (
+    <Marker
+      position={[marker.geoPoint[0], marker.geoPoint[1]]}
+      icon={customIcon}
+      eventHandlers={{
+        click: () => {
+          setActiveMarkerId(marker.id);
+          if (!marker.geoPoint) return;
+          map.setView([marker.geoPoint[0], marker.geoPoint[1]], 16);
+        },
+      }}
     >
-      Подробнее
-    </button>
-  </div>
-`;
+      <Popup>
+        <div className={cl['balloon-content']}>
+          {marker.img && <img src={marker.img} className={cl['balloon-photo']} />}
+          <h3>{marker.title}</h3>
+          <div className={cl['balloon-desc']}>{marker.description}</div>
+          <div className={cl['balloon-footer']}>
+            <span>Автор: {marker.author}</span>
+            <span>Дата: {marker?.createdAt?.toLocaleDateString()}</span>
+          </div>
+          <button
+            className={cl['balloon-button']}
+            onClick={() => setShowInfo(true)}
+          >
+            Подробнее
+          </button>
+        </div>
+      </Popup>
+    </Marker>
+  );
+};
 
 export const Map: React.FC = () => {
-  const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
+  const [activeMarkerId, setActiveMarkerId] = useState<string | undefined>('');
+  // const [newParty, setNewParty] = useState<IParty>({});
+  const [modalCreate, setModalCreate] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [contextMenu, setContextMenu] = useState<{ coords: [number, number]; isActive: boolean }>({
+  const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     coords: [0, 0],
+    latlng: [0, 0],
     isActive: false,
   });
-  const mapRef = useRef<HTMLDivElement>(null);
-
-  const markersData: MarkerData[] = [
-    {
-      id: 1,
-      coordinates: [55, 73.36],
-      title: 'Объект 1',
-      description: 'Описание объекта 1',
-      author: 'Иван Иванов',
-      date: '2024-05-20',
-      photo: '/path/to/photo.jpg',
-    },
-  ];
-
-  const handleMarkerClick = () => {
-    setShowInfo(true);
-  };
-
-  useEffect(() => {
-    (window as any).handleMarkerClick = handleMarkerClick;
-    return () => {
-      delete (window as any).handleMarkerClick;
-    };
-  }, []);
-
-  const features = markersData.map((marker) => ({
-    id: marker.id,
-    geometry: {
-      type: 'Point',
-      coordinates: marker.coordinates,
-    },
-    properties: {
-      balloonContent: generateBalloonContent(marker),
-      hintContent: marker.title,
-      customData: {
-        onClick: () => setActiveMarkerId(marker.id),
-      },
-    },
-  }));
 
   const activeMarkerData = markersData.find((marker) => marker.id === activeMarkerId);
 
-  const handleContextMenu = (e: ymaps.IEvent) => {
-    const position = e.get('position') as [number, number];
-    setContextMenu({ coords: position, isActive: true });
-  };
-
-  const handleClick = () => {
-    setContextMenu({ coords: [0, 0], isActive: false });
-  };
-
   return (
-    <div className={cl['map__container']} ref={mapRef}>
+    <div className={cl['map__container']}>
       {activeMarkerData && showInfo && (
         <SideMarkInfo data={activeMarkerData} onClose={() => setShowInfo(false)} />
       )}
+      
+      <Modal
+        title="Create party"
+        onClose={() => setModalCreate(false)}
+        isVisible={modalCreate}
+        theme='light'
+      >
+
+      </Modal>
 
       {contextMenu.isActive && (
         <div
           className={cl['context-menu']}
           style={{
-            position: 'absolute',
-            top: `${contextMenu.coords[1]}px`,
-            left: `${contextMenu.coords[0]}px`,
+            position: 'fixed',
+            top: `${contextMenu.coords[0] + 10}px`,
+            left: `${contextMenu.coords[1] + 10}px`,
+            zIndex: 1000,
           }}
         >
-          <div className={cl['context-menu__item']}>Добавить маркер</div>
-          <div className={cl['context-menu__item']}>Редактировать</div>
-          <div className={cl['context-menu__item']}>Удалить</div>
+          <div
+            role="presentation"
+            onClick={() => {}}
+            className={cl['context-menu__item']}
+          >
+            Добавить маркер
+          </div>
+          {markersData.some(
+            (marker) =>
+              marker.geoPoint &&
+              marker.geoPoint[0] === contextMenu.latlng[0] &&
+              marker?.geoPoint[1] === contextMenu.latlng[1]
+          ) && (
+            <React.Fragment>
+              <div className={cl['context-menu__item']}>Редактировать</div>
+              <div className={cl['context-menu__item']}>Удалить</div>
+            </React.Fragment>
+          )}
         </div>
       )}
 
-      <YMaps query={{ load: 'package.full' }}>
-        <YaMap
-          defaultState={{ center: [55, 73.36], zoom: 11 }}
-          width="100%"
-          height="900px"
-          className={cl['map']}
-          instanceRef={(mapInstance: ymaps.Map) => {
-            if (mapInstance) {
-              mapInstance.events.add('contextmenu', handleContextMenu);
-              mapInstance.events.add('click', handleClick);
-            }
-          }}
-        >
-          <ObjectManager
-            features={features}
-            options={{
-              clusterize: true,
-              gridSize: 32,
-            }}
-            objects={{
-              openBalloonOnClick: true,
-              preset: 'islands#blueDotIcon',
-            }}
-            modules={['objectManager.addon.objectsBalloon', 'objectManager.addon.objectsHint']}
-            // хз что это, тайпскрипт сам добавил
-            instanceRef={(instance: { objects: { events: { add: (arg0: string, arg1: (e: any) => void) => void; }; }; }) => {
-              if (instance) {
-                instance.objects.events.add('click', (e: any) => {
-                  const objectId = e.get('objectId');
-                  const clickedFeature = features.find((f) => f.id === objectId);
-                  clickedFeature?.properties.customData.onClick();
-                });
-              }
-            }}
+      <MapContainer
+        center={defaultCenter}
+        zoom={15}
+        style={mapContainerStyle}
+        scrollWheelZoom={true}
+        zoomControl={false}
+        attributionControl={false}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <MapEvents setContextMenu={setContextMenu} />
+        {markersData.map((marker) => (
+          <MarkerWithZoom
+            key={marker.id}
+            marker={marker}
+            setActiveMarkerId={setActiveMarkerId}
+            setShowInfo={setShowInfo}
           />
-        </YaMap>
-      </YMaps>
+        ))}
+      </MapContainer>
     </div>
   );
 };
