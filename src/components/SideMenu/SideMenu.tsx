@@ -19,6 +19,14 @@ export const SideMenu = () => {
     const handleMapPage = () => {
         void navigation('/map');
     };
+    const handleRegisterPage = () => {
+        void navigation('/register');
+    };
+
+    const handleLoginPage = () => {
+        void navigation('/login');
+    };
+
 
     return (
         <div className='menu-overview'>
@@ -31,6 +39,8 @@ export const SideMenu = () => {
                 <div className='button' onClick={handleChatPage}>Чаты</div>
                 <div className='button' onClick={handleHomePage}>Мероприятия</div>
                 <div className='button' onClick={handleErrorPage}>Настройки</div>
+                <div className='button' onClick={handleRegisterPage}>Регистрация</div>
+                <div className='button' onClick={handleLoginPage}>Логин</div>
             </div>
         </div>
     );

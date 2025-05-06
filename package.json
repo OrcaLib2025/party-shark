@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.7.0",
+    "firebase": "^11.6.1",
     "leaflet": "^1.9.4",
     "orcalib-ui-kit": "^0.1.6",
     "partyshark-ui-kit": "^0.0.6",
