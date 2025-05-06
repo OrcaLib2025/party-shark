@@ -1,0 +1,15 @@
+@mixin themeBackground($background) {
+    transition: var(--transition-background);
+    background: $background;
+}
+
+@mixin themeColor($color) {
+    transition: var(--transition-color);
+    color: $color;
+}
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
