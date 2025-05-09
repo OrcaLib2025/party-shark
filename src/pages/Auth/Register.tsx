@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from './Auth.module.scss';
 import { useNavigate, Link } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import app from '../../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from '../../firebase';
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button"
 import { useDispatch } from "react-redux";
 import { setAuth } from "../../redux/actions/auth";
-import { useSelector } from "../../redux/store";
 
 
 export const Register = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { isAuth } = useSelector((state) => state.auth);
     
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const auth = getAuth(app);
 
     const handleChangeEmail = (value: string) => {
         setEmail(value);
@@ -57,7 +53,6 @@ export const Register = () => {
             setIsLoading(false);
         }
     };
-    console.log(isAuth);
     return (
         <div>
             <h1>Register your account</h1>
@@ -93,9 +88,9 @@ export const Register = () => {
             />
 
             <p className={styles.login_redirect}>
-                Already have an account?{' '}
+                Уже есть аккаунт?{' '}
                 <Link to="/login" className={styles.login_link}>
-                    Login here
+                    Войти
                 </Link>
             </p>
         </div>

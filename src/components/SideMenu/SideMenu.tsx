@@ -1,7 +1,10 @@
 import './SideMenu.scss';
 import { useNavigate } from "react-router-dom";
-export const SideMenu = () => {
+import { signOut } from 'firebase/auth';
+import { auth } from "../../firebase"
+import { Button } from '../Button';
 
+export const SideMenu = () => {
     const navigation = useNavigate();
 
     const handleHomePage = () => {
@@ -26,6 +29,14 @@ export const SideMenu = () => {
     const handleLoginPage = () => {
         void navigation('/login');
     };
+    const handleLogOutUser = async () => {
+        try {
+            await signOut(auth);
+            void navigation('/');
+        } catch (error) {
+            console.error("Logout failed: ", error);
+        }
+    };
 
 
     return (
@@ -39,8 +50,20 @@ export const SideMenu = () => {
                 <div className='button' onClick={handleChatPage}>Чаты</div>
                 <div className='button' onClick={handleHomePage}>Мероприятия</div>
                 <div className='button' onClick={handleErrorPage}>Настройки</div>
-                <div className='button' onClick={handleRegisterPage}>Регистрация</div>
-                <div className='button' onClick={handleLoginPage}>Логин</div>
+                {auth.currentUser
+                    ? (<Button
+                        type="secondary"
+                        theme="light"
+                        className='logout'
+                        onClick={handleLogOutUser}
+                        text='Выйти из аккаунта'
+                    />)
+                    : (
+                        <>
+                            <div className='button' onClick={handleRegisterPage}>Регистрация</div>
+                            <div className='button' onClick={handleLoginPage}>Логин</div>
+                        </>
+                    )}
             </div>
         </div>
     );
