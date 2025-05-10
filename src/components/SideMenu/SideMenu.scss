@@ -1,20 +1,17 @@
 @use '/src/styles/variables/colors';
 
-
 .menu-overview {
     height: auto;
 }
 
 .menu {
     background: colors.$background-primary;
-    grid-row-start: 1;
-    grid-column-start: 1;
     min-height: 100%;
     position: sticky;
     top: 0;
-    display: grid;
-    grid-column: 1;
-    grid-template-rows: repeat(15, 1fr);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .header {
@@ -22,9 +19,10 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    grid-row: span 2;
     width: 100%;
     padding: 15px;
+    flex-shrink: 0;
+    height: 100px;
 }
 
 .header h1 {
@@ -57,6 +55,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 4px;
+    flex: 1;
+    max-height: 60px;
 
     &:hover {
         background: colors.$lightest-blue;
@@ -75,5 +75,81 @@
         color: colors.$blue-deep;
         border-left: 4px solid colors.$blue-deep;
         font-weight: 600;
+    }
+}
+
+.auth {
+    &-body {
+        padding: 12px 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        span {
+            font-size: 32px;
+            text-decoration: underline;
+        }
+
+        &:hover {
+            span {
+                transition: .1s ease-in-out;
+                color: colors.$blue-dark;
+            }
+        }
+    }
+
+    &-container {
+        position: relative;
+        border-bottom: 4px solid black;
+        margin-bottom: 6px;
+
+        &__button {
+            font-size: 14px;
+            text-align: center;
+            color: white;
+
+            position: absolute;
+            top: -10px;
+            left: 45%;
+            width: 50px;
+            height: 20px;
+            background: colors.$blue-dark;
+            border-radius: 8px;
+            cursor: pointer;
+
+            &:hover {
+                transition: .2s ease-in-out;
+                background: colors.$blue-deep;
+            }
+        }
+    }
+}
+
+.user-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: 2px solid black;
+    border-radius: 100%;
+    overflow: hidden;
+
+    .head {
+        background: gray;
+        border-radius: 100%;
+        width: 25px;
+        height: 25px;
+    }
+
+    .body {
+        background: gray;
+        width: 100%;
+        height: 50%;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
 }
