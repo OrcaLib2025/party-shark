@@ -27,13 +27,7 @@ export const SideMenu: React.FC = () => {
     const handleMapPage = () => {
         void navigation('/map');
     };
-    const handleRegisterPage = () => {
-        void navigation('/register');
-    };
 
-    const handleLoginPage = () => {
-        void navigation('/login');
-    };
     const handleLogOutUser = async () => {
         try {
             await signOut(auth);
@@ -94,20 +88,13 @@ export const SideMenu: React.FC = () => {
                 <div className='button' onClick={handleChatPage}>Чаты</div>
                 <div className='button' onClick={handleHomePage}>Мероприятия</div>
                 <div className='button' onClick={handleErrorPage}>Настройки</div>
-                {auth.currentUser
-                    ? (<Button
-                        type="secondary"
-                        theme="light"
-                        className='logout'
-                        onClick={handleLogOutUser}
-                        text='Выйти из аккаунта'
-                    />)
-                    : (
-                        <>
-                            <div className='button' onClick={handleRegisterPage}>Регистрация</div>
-                            <div className='button' onClick={handleLoginPage}>Логин</div>
-                        </>
-                    )}
+                <Button
+                    type="secondary"
+                    theme="light"
+                    className='logout'
+                    onClick={handleLogOutUser}
+                    text='Выйти из аккаунта'
+                />
             </div>
         </div>
     );

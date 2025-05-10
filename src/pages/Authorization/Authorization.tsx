@@ -1,32 +1,38 @@
-import { Modal } from 'orcalib-ui-kit';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import cl from './Authorization.module.scss';
+import Register from '../Auth/Register';
+import Login from '../Auth/Login';
 
 export const Authorization: React.FC = () => {
-    const navigate = useNavigate();
-
     const [isLog, setIsLog] = useState(true);
 
-    const handleCloseAuth = () => {
-        void navigate('/');
-    }
-
     return (
-        <div className={cl['authoriz']}>
-            <Modal
-                onClose={() => handleCloseAuth()}
-                isVisible={true}
-                title={isLog ? 'Log in' : 'Registration'}
-            >
-                <span
-                    role="presentation"
-                    onClick={() => setIsLog(!isLog)}
-                >
-                    {isLog ? 'Log in' : 'Registration'}
-                </span>
-            </Modal>
+        <div className={cl['sss']}>
+            <div className={cl['authoriz']}>
+                {
+                    isLog ? (
+                        <Login />
+                    ) : <Register />
+                }
+
+                <p>
+                    {
+                        isLog ? (
+                            'Нет аккаунта?'
+                        ) : 'Есть аккаунт?'
+                    }
+                    {' '}
+                    <a
+                        className={cl['authoriz__change']}
+                        onClick={() => setIsLog(!isLog)}
+                    >
+                        {
+                            isLog ? 'Зарегестрируйся!' : 'Войди!'
+                        }
+                    </a>
+                </p>
+            </div>
         </div>
     )
 };

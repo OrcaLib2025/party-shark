@@ -5,7 +5,6 @@ import { Suspense, useEffect, useState } from 'react';
 import { Map } from './pages/Map';
 import { Chat } from './pages/Chat';
 import { Authorization } from './pages/Authorization';
-import { Login, Register } from './pages/Auth';
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from './firebase'
 
@@ -39,13 +38,11 @@ function App() {
             user ? (
             <Suspense><Chat /></Suspense>
             ) : (
-              <Navigate to ='/login' />
+              <Navigate to ='/authorization' />
             )
             }/>
           <Route path="/map" element={<Suspense><Map /></Suspense>} />
-          <Route path="/login" element={<Suspense><Login /></Suspense>} />
-          <Route path="/register" element={<Suspense><Register /></Suspense>} />
-          <Route path="/groups" element={<Suspense><div>Pupsya</div></Suspense>}/>
+          <Route path="/groups" element={<Suspense><div>1</div></Suspense>}/>
 
           {
             isAuth ? (
