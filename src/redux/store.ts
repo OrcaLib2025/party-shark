@@ -1,11 +1,12 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { TypedUseSelectorHook, useSelector as reduxUseSelector } from 'react-redux';
-import { partyReducer } from './reducer';
+import { partyReducer, authReducer } from './reducer';
 import { partySaga } from './saga';
 
 const rootReducer = combineReducers({
     marker: partyReducer,
+    auth: authReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

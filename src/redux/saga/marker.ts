@@ -12,7 +12,7 @@ interface CreatePartyResponse {
 
 const request = new Request('http://localhost:3003/api');
 
-function* createPartySaga(action: { type: string; payload: Omit<IParty, 'createdAt' | 'membersCount'> }): Generator<any, void, any> {
+export function* createPartySaga(action: { type: string; payload: Omit<IParty, 'createdAt' | 'membersCount'> }): Generator<any, void, any> {
     try {
         const response: CreatePartyResponse = yield call(request.post, '/parties', action.payload);
         if (response.success) {

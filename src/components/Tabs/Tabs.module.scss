@@ -1,0 +1,65 @@
+@use '../../utils/variables/colors.scss';
+
+.tabsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+}
+
+.tabsHeader {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+
+    &:first-child {
+        border-top-left-radius: 4px;
+    }
+
+    &:last-child {
+        border-top-right-radius: 4px;
+    }
+
+    &:hover {
+        background: #f0f0f0;
+    }
+
+    &.activeTab {
+        color: colors.$red-vine;
+        font-weight: bold;
+    }
+}
+
+.tabsContent {
+    padding: 8px;
+    min-height: 80px;
+}
+
+.activeIndicator {
+    position: absolute;
+    bottom: -1px;
+    height: 2px;
+    background: colors.$red-deep;
+    transition: all .2s cubic-bezier(0.8, 0, 1, 1);
+}
+
+.tab {
+    &-theme {
+        &-light {
+            color: colors.$text-secondary;
+        }
+
+        &-dark {
+            color: colors.$text-primary;
+        }
+    }
+}
