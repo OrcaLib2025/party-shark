@@ -10,7 +10,7 @@ import { Input } from "../../components/Input";
 import { Button } from "../../components/Button"
 import cl from './Auth.module.scss';
 import { useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setAuth } from "../../redux/actions/auth";
 
 export const Login = () => {
@@ -36,8 +36,7 @@ export const Login = () => {
             await signInWithEmailAndPassword(auth, email, password)
                 .then(void dispatch(setAuth(true)))
                 .catch(void dispatch(setAuth(false)));
-            
-                navigate('/');
+            navigate('/');
         } catch (error) {
             console.log(error);
         } finally {

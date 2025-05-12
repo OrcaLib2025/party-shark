@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import cl from './Auth.module.scss';
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from '../../firebase';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
+import { auth, db } from '../../firebase';
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button"
 import { useDispatch } from "react-redux";
@@ -32,16 +33,15 @@ export const Register: React.FC = () => {
         setIsLoading(true);
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password)
-                .then(void dispatch(setAuth(true)))
-                .catch(void dispatch(setAuth(false)));
+            const res = await createUserWithEmailAndPassword(auth, email, password)
+            dispatch(setAuth(true));
 
-            if (auth.currentUser) {
-                await updateProfile(auth.currentUser, {
-                    displayName: username
+                await setDoc(doc(db, "users", res.user.uid), {
+                    username,
+                    email,
+                    id: res.user.uid,
+                    blocked: [],
                 });
-            }
-
             navigate('/');
 
         } catch (error) {
