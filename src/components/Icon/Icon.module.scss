@@ -1,6 +1,7 @@
 .icon {
     display: inline-block;
     mask-size: cover;
+    vertical-align: top;
     mask-position: center;
     mask-repeat: no-repeat;
     background-color: currentColor;
@@ -186,6 +187,10 @@
 
 .icon-logout {
     mask-image: url('../../assets/icons/logout.svg');
+}
+
+.icon-minus {
+    mask-image: url('../../assets/icons/minus.svg');
 }
 
 .icon-notification-new {

@@ -1,5 +1,37 @@
+@use '/src/styles/variables/colors';
+
+.search {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
 .searchBar {
     margin: 20px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 50%;
+}
+
+.icon {
+    cursor: pointer;
+}
+
+.addIcon {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    background-color: colors.$blue-deep;
+    padding: 10px;
+    border-radius: 10px;
+    color: colors.$text-white;
+}
+.chatList {
+    flex: 1;
+    overflow: scroll;
 }

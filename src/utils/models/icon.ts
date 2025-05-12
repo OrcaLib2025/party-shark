@@ -56,6 +56,7 @@ const iconNames = [
     "libro-icon",
     "lock",
     "logout",
+    "minus",
     "notification-new",
     "notification",
     "phone",

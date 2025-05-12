@@ -54,6 +54,7 @@ import KeyIcon from '../assets/icons/key.svg';
 import LibroIconIcon from '../assets/icons/libro-icon.svg';
 import LockIcon from '../assets/icons/lock.svg';
 import LogoutIcon from '../assets/icons/logout.svg';
+import Minus from '../assets/icons/minus.svg';
 import NotificationNewIcon from '../assets/icons/notification-new.svg';
 import NotificationIcon from '../assets/icons/notification.svg';
 import PhoneIcon from '../assets/icons/phone.svg';
@@ -140,6 +141,7 @@ export const iconMap = {
   'libro-icon': LibroIconIcon,
   'lock': LockIcon,
   'logout': LogoutIcon,
+  'minus' : Minus,
   'notification-new': NotificationNewIcon,
   'notification': NotificationIcon,
   'phone': PhoneIcon,
