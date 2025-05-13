@@ -7,6 +7,7 @@ import { Chat } from './pages/Chat';
 import { Authorization } from './pages/Authorization';
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from './firebase'
+import { Messenger } from './pages/Chat/Messenger';
 
 function App() {
   const isAuth = false;
@@ -43,6 +44,7 @@ function App() {
             }/>
           <Route path="/map" element={<Suspense><Map /></Suspense>} />
           <Route path="/groups" element={<Suspense><div>1</div></Suspense>}/>
+          <Route path="/messenger" element={<Suspense><Messenger></Messenger></Suspense>}/>
 
           {
             isAuth ? (
