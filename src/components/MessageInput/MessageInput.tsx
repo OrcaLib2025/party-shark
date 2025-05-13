@@ -13,19 +13,19 @@ export const MessageInput = () => {
   const handleChangeInput = (value: string) => {
     setInputValue(value);
   };
-  
+
   const handleSubmit = () => {
   };
-  
+
   const handleEmoji = (e: EmojiClickData) => {
     setInputValue(inputValue => inputValue + e.emoji);
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (emojiPickerRef.current && 
-          !emojiPickerRef.current.contains(event.target as Node) &&
-          !(event.target as Element).closest(`.${styles.icons}`)) {
+      if (emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node) &&
+        !(event.target as Element).closest(`.${styles.icons}`)) {
         setIsEmojiOpen(false);
       }
     };
@@ -56,18 +56,20 @@ export const MessageInput = () => {
         size="large"
         value={inputValue}
       />
-      <div className={styles.emoji} ref={emojiPickerRef}>
+      <div className={styles.emojiContainer} ref={emojiPickerRef}>
         <Icon
           icon="user-follow"
           size="lg"
           className={styles.icon}
           onClick={() => setIsEmojiOpen(!isEmojiOpen)}
         />
-        <EmojiPicker
-          className={styles.emojiPicker}
-          open={isEmojiOpen}
-          onEmojiClick={handleEmoji}
-        />
+        <div className={styles.emoji}>
+          <EmojiPicker
+            className={styles.emojiPicker}
+            open={isEmojiOpen}
+            onEmojiClick={handleEmoji}
+          />
+        </div>
       </div>
       <Button
         type="secondary"

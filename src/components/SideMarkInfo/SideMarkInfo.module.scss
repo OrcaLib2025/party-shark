@@ -1,49 +1,121 @@
 @use '../../styles/variables/colors';
 
 .marker-info {
-    max-width: 320px;
-    width: 100%;
+    width: 360px;
     position: absolute;
     height: 90%;
+    max-height: 700px;
     top: 16px;
     right: 32px;
     z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    background: colors.$background-primary;
+    border: 1px solid colors.$lightest-blue;
 
     &__body {
-        overflow-y: auto;
+        overflow-x: hidden;
         height: 100%;
         display: flex;
         flex-direction: column;
-        gap: 8px;
-
-        background: white;
-        border: 1px solid black;
-        border-radius: 8px;
-
-        padding: 4px 8px;
+        padding: 0 12px;
+        gap: 16px;
+        background: linear-gradient(135deg, rgba(colors.$lightest-blue, 0.2) 0%, rgba(colors.$blue-light, 0.1) 100%);
     }
 
     &__img {
-        background: colors.$gray-disabled;
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
         border-radius: 8px;
+        margin-bottom: 8px;
+        border: 1px solid colors.$lightest-blue;
+        box-shadow: 0 2px 8px rgba(colors.$blue-deep, 0.1);
+    }
+
+    h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: colors.$blue-deep;
+        font-weight: 600;
     }
 
     &__date {
-        background: colors.$background-secondary;
+        background: colors.$chat-accent-soft;
         border-radius: 8px;
-        padding: 12px 24px;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        color: colors.$text-secondary;
+        border-left: 3px solid colors.$blue-icon;
+    }
+
+    span {
+        font-size: 0.9rem;
+        color: colors.$gray-dark;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+
+        &::before {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: colors.$blue-icon;
+            
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>') no-repeat center;
+        }
+    }
+
+    button {
+        margin-top: auto;
+        background: linear-gradient(135deg, colors.$blue 0%, colors.$blue-icon 100%);
+        color: colors.$text-primary-light;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(colors.$blue, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        &:hover {
+            background: linear-gradient(135deg, colors.$blue-dark 0%, colors.$blue-deep 100%);
+            box-shadow: 0 4px 12px rgba(colors.$blue-deep, 0.4);
+            
+            &::after {
+                transform: translateX(3px);
+            }
+        }
     }
 }
 
 .close-btn {
     position: absolute;
-    top: -5px;
-    left: -5px;
+    top: 12px;
+    right: 12px;
     z-index: 1000;
+    background: colors.$background-primary;
+    border: 1px solid colors.$lightest-blue;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(colors.$blue-deep, 0.1);
+    transition: all 0.3s ease;
+    color: colors.$blue-icon;
 
-    border-radius: 100%;
-    width: 25px;
-    height: 25px;
+    &:hover {
+        background: colors.$button-hover;
+        transform: scale(1.1);
+    }
 }

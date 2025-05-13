@@ -123,7 +123,6 @@ export const Map: React.FC = () => {
         title="Create party"
         onClose={() => setModalCreate(false)}
         isVisible={modalCreate}
-        theme='light'
       >
 
       </Modal>

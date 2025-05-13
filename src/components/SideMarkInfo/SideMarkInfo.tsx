@@ -16,7 +16,9 @@ export const SideMarkInfo: React.FC<Marker & SideMarkInfo> = ({
             <button
                 className={cl['close-btn']}
                 onClick={onClose}
-            >X</button>
+            >
+                X
+            </button>
             <div className={cl['marker-info__body']}>
                 <img
                     src='img/Seat.svg'
