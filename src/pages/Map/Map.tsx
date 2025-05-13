@@ -6,6 +6,7 @@ import { IParty } from '../../utils/models/MarkerData';
 import cl from './Map.module.scss';
 import { SideMarkInfo } from '../../components/SideMarkInfo';
 import { Modal } from 'orcalib-ui-kit';
+import { useNavigate } from 'react-router-dom';
 
 const customIcon = new L.Icon({
   iconUrl: '/icons/marker.svg', // Если найдем метку получше, менять здесь
@@ -101,6 +102,8 @@ const MarkerWithZoom: React.FC<{
 };
 
 export const Map: React.FC = () => {
+  const navigate = useNavigate();
+
   const [activeMarkerId, setActiveMarkerId] = useState<string | undefined>('');
   // const [newParty, setNewParty] = useState<IParty>({});
   const [modalCreate, setModalCreate] = useState(false);
@@ -139,7 +142,7 @@ export const Map: React.FC = () => {
         >
           <div
             role="presentation"
-            onClick={() => {}}
+            onClick={() => void navigate('/add-event')}
             className={cl['context-menu__item']}
           >
             Добавить маркер
@@ -165,6 +168,7 @@ export const Map: React.FC = () => {
         scrollWheelZoom={true}
         zoomControl={false}
         attributionControl={false}
+        className={cl['map']}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
