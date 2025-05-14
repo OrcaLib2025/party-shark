@@ -1,26 +1,8 @@
 import { useState } from 'react';
 import styles from './AddNewEvent.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { Icon } from 'orcalib-ui-kit';
-
-export interface IParty {
-  img?: string;
-  title: string;
-  description?: string;
-  members?: string[];
-  geoPoint: [number, number];
-  isActive: boolean;
-  createdAt: Date;
-  endDate: Date;
-  timeSlots: {
-    start: Date;
-    end: Date;
-  }[];
-  maxMembers: number;
-  membersCount: number;
-  tags: string[];
-  isPaid: boolean;
-}
+import { Icon } from '../../../components/Icon';
+import { IParty } from '../../../utils/models/MarkerData';
 
 export const AddNewEvent: React.FC = () => {
   const navigate = useNavigate();
@@ -117,7 +99,7 @@ export const AddNewEvent: React.FC = () => {
       >
         <Icon
           icon="arrow-to-left-bold"
-          size='sm'
+          size='md'
         />
       </div>
 

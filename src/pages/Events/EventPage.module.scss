@@ -1,0 +1,70 @@
+.event {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+
+    &__image-wrapper {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-bottom: 16px;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    &__title {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    &__description {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #444;
+    }
+
+    &__meta {
+        font-size: 14px;
+        color: #666;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__slots {
+        margin-top: 16px;
+    }
+
+    &__slots-title {
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    &__slots-list {
+        padding-left: 20px;
+    }
+
+    &__slot {
+        list-style: disc;
+        font-size: 14px;
+        color: #333;
+    }
+}

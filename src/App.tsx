@@ -9,6 +9,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from './firebase'
 import { Messenger } from './pages/Chat/Messenger';
 import { AddNewEvent } from './pages/Map/router/AddNewEvent';
+import { EventPage } from './pages/Events';
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,33 +29,36 @@ function App() {
   }, [user]);
 
   return (
-    <div className='wrapper'>
-      <SideMenu />
+    <div className="app">
+      <div className='wrapper'>
+        <SideMenu />
 
-      <div className='div1'>
-        <Routes>
-          <Route path="/" element={<Suspense><div className=''>1</div></Suspense>} />
-          <Route path="/authorization" element={<Suspense><Authorization /></Suspense>} />
-          <Route path="/chat" element={
-            user ? (
-              <Suspense><Chat /></Suspense>
-            ) : (
-              <Navigate to='/authorization' />
-            )
-          } />
-          <Route path="/map" element={<Suspense><Map /></Suspense>} />
-          <Route path="/groups" element={<Suspense><div>1</div></Suspense>} />
-          <Route path="/messenger" element={<Suspense><Messenger></Messenger></Suspense>} />
+        <div className='div1'>
+          <Routes>
+            <Route path="/" element={<Suspense><div className=''>1</div></Suspense>} />
+            <Route path="/authorization" element={<Suspense><Authorization /></Suspense>} />
+            <Route path="/chat" element={
+              user ? (
+                <Suspense><Chat /></Suspense>
+              ) : (
+                <Navigate to='/authorization' />
+              )
+            } />
+            <Route path="/map" element={<Suspense><Map /></Suspense>} />
+            <Route path="/groups" element={<Suspense><div>1</div></Suspense>} />
+            <Route path="/messenger" element={<Suspense><Messenger></Messenger></Suspense>} />
+            <Route path="/event/:id" element={<Suspense><EventPage /></Suspense>} />
 
-          {
-            user ? (
-              <>
-                <Route path='/profile' element={<div>Profile</div>} />
-                <Route path='/add-event' element={<AddNewEvent />} />
-              </>
-            ) : undefined
-          }
-        </Routes>
+            {
+              user ? (
+                <>
+                  <Route path='/profile' element={<div>Profile</div>} />
+                  <Route path='/add-event' element={<AddNewEvent />} />
+                </>
+              ) : undefined
+            }
+          </Routes>
+        </div>
       </div>
     </div>
   );
