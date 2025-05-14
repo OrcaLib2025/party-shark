@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './AddNewEvent.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { Icon } from 'orcalib-ui-kit';
 
 export interface IParty {
   img?: string;
@@ -21,6 +23,8 @@ export interface IParty {
 }
 
 export const AddNewEvent: React.FC = () => {
+  const navigate = useNavigate();
+
   const [newEvent, setNewEvent] = useState<Partial<IParty>>({
     title: '',
     description: '',
@@ -75,8 +79,8 @@ export const AddNewEvent: React.FC = () => {
       ...prev,
       tags: value
         .split(',')
-        .map((tag) => tag.trim())
-        .filter((tag) => tag !== ''),
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag !== ''),
     }));
   };
 
@@ -106,6 +110,17 @@ export const AddNewEvent: React.FC = () => {
 
   return (
     <div className={styles['add-event-container']}>
+      <div
+        role="presentation"
+        className={styles['leave-button']}
+        onClick={() => void navigate('/map')}
+      >
+        <Icon
+          icon="arrow-to-left-bold"
+          size='sm'
+        />
+      </div>
+
       <h1>Создать новое мероприятие</h1>
 
       <div className={styles['event-form']}>
