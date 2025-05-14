@@ -10,5 +10,5 @@ export interface InputProps {
     onChange: (value: string) => void;
     size?: 'default' | 'large';
     theme: 'light' | 'dark';
-    className?: string;
+    classNames?: string;
 }

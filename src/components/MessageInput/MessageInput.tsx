@@ -48,7 +48,7 @@ export const MessageInput = () => {
       </div>
       <Input
         type="text"
-        className={styles.inputField}
+        classNames={styles.inputField}
         placeholder="Напишите сообщение..."
         aria-label="Поле ввода сообщения"
         onChange={handleChangeInput}

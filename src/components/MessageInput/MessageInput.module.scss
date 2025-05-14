@@ -2,6 +2,7 @@
 
 .inputContainer {
     display: flex;
+    justify-content: space-between;
     padding: 16px 24px;
     border-top: 1px solid rgba(colors.$blue-light, 0.15);
     background: rgba(colors.$blue, 0.9);
@@ -66,4 +67,7 @@
 }
 .emojiPicker {
     position: relative;
+}
+.inputField {
+    padding: 0;
 }

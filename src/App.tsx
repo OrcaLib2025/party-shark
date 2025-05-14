@@ -13,7 +13,7 @@ import { AddNewEvent } from './pages/Map/router/AddNewEvent';
 function App() {
   const [user, setUser] = useState<User | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loading, setLoading] = useState<boolean>(true);
+  const [_, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

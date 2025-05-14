@@ -14,13 +14,14 @@ export const Input: React.FC<InputProps> = ({
     onChange,
     size = 'default',
     theme,
+    classNames,
 }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
     };
 
     return (
-        <div className={cl['input-container']}>
+        <div className={classnames(cl['input-container'], classNames)}>
             {label && <label className={cl['input-label']}>{label}</label>}
             <div className={cl['input-wrapper']}>
                 <input

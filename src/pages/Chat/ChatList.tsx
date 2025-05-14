@@ -7,8 +7,9 @@ import avatarImage from '../../assets/pictures/avatar.png'
 import avatarGroupImage from '../../assets/pictures/group-avatar.png'
 import { Timestamp } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
+import { IChatItem } from '../../utils/models/Chat';
 
-const mockChats = [
+const mockChats: IChatItem[] = [
     {
         chatId: 1,
         sender: "Команда PartyShark",
@@ -59,7 +60,7 @@ const mockChats = [
         lastMessage: "Кто едет на рыбалку в субботу?",
         isGroup: true,
         unreadCount: 0,
-        type: 'groups',
+        type: 'group',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1709800000, 0),
         isOnline: false
@@ -103,7 +104,7 @@ const mockChats = [
         lastMessage: "Новые места для дайвинга в этом сезоне",
         isGroup: true,
         unreadCount: 3,
-        type: 'groups',
+        type: 'group',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1709600000, 0),
         isOnline: false
@@ -124,7 +125,7 @@ const mockChats = [
 export const ChatList = () => {
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
-    const [activeChatId, setActiveChatId] = useState<number | null>(null);
+    const [activeChatId,] = useState<number | null>(null);
     const [filter, setFilter] = useState<'all' | 'private' | 'groups' | 'events'>('all');
 
     const handleSearchValue = (value: string) => {
@@ -184,7 +185,6 @@ export const ChatList = () => {
                 </div>
             </div>
 
-            {/* Обновлённая панель фильтров (справа) */}
             <div className={styles.sidebar}>
                 <div className={styles.filterTitle}>Фильтры</div>
                 <div className={styles.filterButtons}>

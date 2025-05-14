@@ -1,25 +1,14 @@
 import styles from './ChatItem.module.scss'
-import { Timestamp } from 'firebase/firestore'
 import { formatTime } from '../../utils/services/timeUitl'
+import { IChatItem } from '../../utils/models/Chat'
 
-interface IChatItem {
-    chatItem: {
-        chatId: number,
-        uid?: number,
-        sender: string,
-        lastMessage?: string,
-        messageTime?: Timestamp,
-        isOnline?: boolean;
-        unreadCount?: number;
-        isGroup?: boolean;
-        profilePicture?: string;
-        type: string;
-    }
+interface ChatItemProps {
+    chatItem: IChatItem;
     isActive?: boolean;
     onClick?: () => void;
 }
 
-export const ChatItem: React.FC<IChatItem> = ({ chatItem, isActive = false, onClick }) => {
+export const ChatItem: React.FC<ChatItemProps> = ({ chatItem, isActive = false, onClick }) => {
     return (
         <div
             className={`${styles.item} ${isActive ? styles.active : ''}`}
