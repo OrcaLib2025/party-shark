@@ -1,0 +1,31 @@
+@use '../../styles/variables/colors';
+@use '../../styles/variables/extras.scss';
+
+.searcher-container {
+    display: flex;
+    align-items: center;
+    max-width: 840px;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 18px;
+    outline: none;
+    background: white;
+
+    &-theme {
+        &-light {
+            color: colors.$text-secondary;
+            @include extras.themeBackground(colors.$background-secondary);
+        }
+
+        &-dark {
+            color: colors.$text-primary;
+            @include extras.themeBackground(colors.$dark-background-secondary);
+        }
+    }
+}

@@ -125,7 +125,7 @@ const mockChats: IChatItem[] = [
 export const ChatList = () => {
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
-    const [activeChatId,] = useState<number | null>(null);
+    const [activeChatId, ] = useState<number | null>(null);
     const [filter, setFilter] = useState<'all' | 'private' | 'groups' | 'events'>('all');
 
     const handleSearchValue = (value: string) => {

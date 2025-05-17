@@ -2,6 +2,7 @@ import React from 'react';
 import { Marker } from '../../utils/models/MarkerData';
 
 import cl from './SideMarkInfo.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 interface SideMarkInfo {
     onClose: () => void,
@@ -11,6 +12,8 @@ export const SideMarkInfo: React.FC<Marker & SideMarkInfo> = ({
     data,
     onClose,
 }) => {
+    const navigate = useNavigate();
+
     return (
         <div className={cl['marker-info']}>
             <button
@@ -33,7 +36,9 @@ export const SideMarkInfo: React.FC<Marker & SideMarkInfo> = ({
                     {' '}
                     {data.author}
                 </span>
-                <button>
+                <button
+                    onClick={() => void navigate(`/event/${data.id}`)}
+                >
                     На страницу вечеринки!
                 </button>
             </div>

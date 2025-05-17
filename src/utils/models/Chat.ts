@@ -12,3 +12,10 @@ export interface IChatItem {
     profilePicture?: string;
     type: "private" | "group" | "event" | "all";
 }
+
+export interface ChatMember {
+    username: string;
+    isOnline: boolean;
+    uid: number;
+    profilePicture?: string;
+}

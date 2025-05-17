@@ -1,5 +1,6 @@
 import { Message } from "../Message";
 import styles from "./MessageList.module.scss";
+import image from '../../assets/pictures/avatar.png'
 
 const mockMessages = [
     {
@@ -15,6 +16,7 @@ const mockMessages = [
       sender: "Вы",
       timestamp: "10:32",
       isCurrentUser: true,
+      image: image,
     },
     {
       id: 3,
@@ -22,6 +24,7 @@ const mockMessages = [
       sender: "Иван Иванов",
       timestamp: "10:33",
       isCurrentUser: false,
+      image: image,
     },
     {
       id: 4,
@@ -218,6 +221,7 @@ const mockMessages = [
       sender: "Ольга Новикова",
       timestamp: "09:15",
       isCurrentUser: false,
+      image: image,
     },
     {
       id: 32,

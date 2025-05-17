@@ -22,7 +22,12 @@ export const Input: React.FC<InputProps> = ({
 
     return (
         <div className={classnames(cl['input-container'], classNames)}>
-            {label && <label className={cl['input-label']}>{label}</label>}
+            {
+                label &&
+                <label className={cl['input-label']}>
+                    {label}
+                </label>
+            }
             <div className={cl['input-wrapper']}>
                 <input
                     type={type}

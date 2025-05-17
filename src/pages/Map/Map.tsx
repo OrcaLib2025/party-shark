@@ -31,6 +31,7 @@ const markersData: IParty[] = [
     author: 'Иван Иванов',
     createdAt: new Date(),
     img: 'img/Seat.svg',
+    tags: ['Вечеринка', 'Пикми', 'Бомбардино Крокодило'],
   },
 ];
 
@@ -119,9 +120,12 @@ export const Map: React.FC = () => {
   return (
     <div className={cl['map__container']}>
       {activeMarkerData && showInfo && (
-        <SideMarkInfo data={activeMarkerData} onClose={() => setShowInfo(false)} />
+        <SideMarkInfo
+          data={activeMarkerData}
+          onClose={() => setShowInfo(false)}
+        />
       )}
-      
+
       <Modal
         title="Create party"
         onClose={() => setModalCreate(false)}
@@ -153,11 +157,11 @@ export const Map: React.FC = () => {
               marker.geoPoint[0] === contextMenu.latlng[0] &&
               marker?.geoPoint[1] === contextMenu.latlng[1]
           ) && (
-            <React.Fragment>
-              <div className={cl['context-menu__item']}>Редактировать</div>
-              <div className={cl['context-menu__item']}>Удалить</div>
-            </React.Fragment>
-          )}
+              <React.Fragment>
+                <div className={cl['context-menu__item']}>Редактировать</div>
+                <div className={cl['context-menu__item']}>Удалить</div>
+              </React.Fragment>
+            )}
         </div>
       )}
 

@@ -5,10 +5,11 @@
 }
 
 .add-event-container {
+  position: relative;
   width: 100%;
   max-width: 1000px;
-  margin: 2rem auto;
-  padding: 1.5rem;
+  margin: .5rem auto;
+  padding: 1rem;
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(colors.$blue-deep, 0.1);
@@ -228,5 +229,27 @@
     border-color: colors.$blue-light;
     color: colors.$blue-deep;
     background: rgba(colors.$blue-light, 0.1);
+  }
+}
+
+.leave-button {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  width: 32px;
+  height: 32px;
+  color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 8px;
+  border: 2px solid colors.$blue-icon;
+
+  cursor: pointer;
+
+  &:hover {
+    border-color: colors.$blue-dark;
   }
 }
