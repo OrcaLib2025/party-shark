@@ -1,6 +1,5 @@
 @use '/src/styles/variables/colors';
 
-
 .message {
     margin-bottom: 16px;
     width: fit-content;
@@ -26,7 +25,7 @@
             justify-content: flex-end;
             
             &::before {
-                display: none; // Убираем точку для своих сообщений
+                display: none;
             }
             
             &::after {
@@ -136,9 +135,76 @@
     color: rgba(colors.$text-primary, 0.7);
 }
 
-.textImage{
+.textImage {
     width: 100%;
-    height: 300px;
+    max-width: 400px;
+    height: auto;
+    max-height: 300px;
     border-radius: 10px;
     object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 8px;
+
+    &:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Стили для превью изображения */
+.imagePreview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+
+    img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        border-radius: 4px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.closePreview {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.1);
+    }
+
+    span {
+        position: relative;
+        top: -2px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

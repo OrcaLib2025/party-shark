@@ -1,33 +1,53 @@
+import { useState } from 'react';
 import styles from "./Message.module.scss";
 
 interface IMessage {
-    message: {
-        id: number;
-        text: string;
-        sender: string;
-        timestamp: string;
-        isCurrentUser: boolean;
-        image?: string | undefined;
-    }
+  message: {
+    id: number;
+    text: string;
+    sender: string;
+    timestamp: string;
+    isCurrentUser: boolean;
+    image?: string | undefined;
+  }
 }
 
 export const Message: React.FC<IMessage> = ({ message }) => {
-  const messageClasses = `${styles.message} ${
-    message.isCurrentUser ? styles.currentUser : styles.notCurrentUser
-  }`;
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const messageClasses = `${styles.message} ${message.isCurrentUser ? styles.currentUser : styles.notCurrentUser
+    }`;
 
   return (
-    <div className={messageClasses}>
-      {!message.isCurrentUser && (
-        <div className={styles.sender}>{message.sender}</div>
-      )}
-      <div className={styles.content}>
-        {message.image && (
-          <img className= {styles.textImage} src= {message.image} />
+    <>
+      <div className={messageClasses}>
+        {!message.isCurrentUser && (
+          <div className={styles.sender}>{message.sender}</div>
         )}
-        <div className={styles.text}>{message.text}</div>
-        <div className={styles.time}>{message.timestamp}</div>
+        <div className={styles.content}>
+          {message.image && (
+            <img
+              className={styles.textImage}
+              src={message.image}
+              onClick={() => setSelectedImage(message.image || null)}
+            />
+          )}
+          <div className={styles.text}>{message.text}</div>
+          <div className={styles.time}>{message.timestamp}</div>
+        </div>
       </div>
-    </div>
+
+      {selectedImage && (
+        <div className={styles.imagePreview}>
+          <button
+            className={styles.closePreview}
+            onClick={() => setSelectedImage(null)}
+          >
+            <span>×</span>
+          </button>
+          <img src={selectedImage} alt="Просмотр изображения" />
+        </div>
+      )}
+    </>
   );
 };

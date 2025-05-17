@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Icon } from "../Icon";
 import styles from "./ChatInfoPopup.module.scss";
-import { ChatMember } from '../../utils/models/Chat'
+import { ChatMember } from '../../utils/models/Chat';
 
 interface IChatInfoPopup {
   title: string;
@@ -24,7 +24,6 @@ export const ChatInfoPopup = ({
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
-  // Закрытие при клике вне попапа
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -33,9 +32,7 @@ export const ChatInfoPopup = ({
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
 
   return (
