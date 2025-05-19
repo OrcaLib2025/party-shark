@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 export interface IChatItem {
     chatId: number;
@@ -10,7 +10,7 @@ export interface IChatItem {
     unreadCount?: number;
     isGroup?: boolean;
     profilePicture?: string;
-    type: "private" | "group" | "event" | "all";
+    type: 'private' | 'group' | 'event' | 'all';
 }
 
 export interface ChatMember {
@@ -18,4 +18,13 @@ export interface ChatMember {
     isOnline: boolean;
     uid: number;
     profilePicture?: string;
+}
+
+export interface MockChat {
+    title: string;
+    onlineStatus: boolean;
+    isGroupChat: boolean;
+    participants: {
+        ChatMember: ChatMember;
+    }[];
 }

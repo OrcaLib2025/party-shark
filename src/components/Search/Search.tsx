@@ -1,8 +1,9 @@
-import React from 'react';
-import cl from './Search.module.scss';
 import classnames from 'classnames';
-import { Icon } from '../Icon';
+import React from 'react';
+
 import { SearchProps } from '../../utils/models/search';
+import { Icon } from '../Icon';
+import cl from './Search.module.scss';
 
 export const Search: React.FC<SearchProps> = ({
     placeholder = 'Поиск...',

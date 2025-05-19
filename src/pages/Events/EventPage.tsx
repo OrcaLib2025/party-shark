@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from './EventPage.module.scss';
+
 import { IParty } from '../../utils/models/MarkerData';
+import styles from './EventPage.module.scss';
 
 export const EventPage: React.FC = () => {
     const markersData: IParty[] = [

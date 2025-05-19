@@ -1,83 +1,84 @@
-import { useState, useRef, useEffect } from "react";
-import { Input } from "../Input";
-import styles from "./MessageInput.module.scss";
-import { Button } from "../Button";
-import { Icon } from "../Icon";
-import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { useEffect, useRef, useState } from 'react';
+
+import { Button } from '../Button';
+import { Icon } from '../Icon';
+import { Input } from '../Input';
+import styles from './MessageInput.module.scss';
 
 export const MessageInput = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
-  const emojiPickerRef = useRef<HTMLDivElement>(null);
+    const [inputValue, setInputValue] = useState('');
+    const [isEmojiOpen, setIsEmojiOpen] = useState(false);
+    const emojiPickerRef = useRef<HTMLDivElement>(null);
 
-  const handleChangeInput = (value: string) => {
-    setInputValue(value);
-  };
+    const handleChangeInput = (value: string) => {
+        setInputValue(value);
+    };
 
-  const handleSubmit = () => {
-  };
+    const handleSubmit = () => {
+    };
 
-  const handleEmoji = (e: EmojiClickData) => {
-    setInputValue(inputValue => inputValue + e.emoji);
-  };
+    const handleEmoji = (e: EmojiClickData) => {
+        setInputValue(inputValue => inputValue + e.emoji);
+    };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (emojiPickerRef.current &&
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (emojiPickerRef.current &&
         !emojiPickerRef.current.contains(event.target as Node) &&
         !(event.target as Element).closest(`.${styles.icons}`)) {
-        setIsEmojiOpen(false);
-      }
-    };
+                setIsEmojiOpen(false);
+            }
+        };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
-  return (
-    <div className={styles.inputContainer}>
-      <div className={styles.icons}>
-        <Icon
-          size="lg"
-          icon="attachment"
-          className={styles.icon}
-          onClick={() => { }}
-        />
-      </div>
-      <Input
-        type="text"
-        classNames={styles.inputField}
-        placeholder="Напишите сообщение..."
-        aria-label="Поле ввода сообщения"
-        onChange={handleChangeInput}
-        theme="light"
-        size="large"
-        value={inputValue}
-      />
-      <div className={styles.emojiContainer} ref={emojiPickerRef}>
-        <Icon
-          icon="user-follow"
-          size="lg"
-          className={styles.icon}
-          onClick={() => setIsEmojiOpen(!isEmojiOpen)}
-        />
-        <div className={styles.emoji}>
-          <EmojiPicker
-            className={styles.emojiPicker}
-            open={isEmojiOpen}
-            onEmojiClick={handleEmoji}
-          />
+    return (
+        <div className={styles.inputContainer}>
+            <div className={styles.icons}>
+                <Icon
+                    size="lg"
+                    icon="attachment"
+                    className={styles.icon}
+                    onClick={() => { }}
+                />
+            </div>
+            <Input
+                type="text"
+                classNames={styles.inputField}
+                placeholder="Напишите сообщение..."
+                aria-label="Поле ввода сообщения"
+                onChange={handleChangeInput}
+                theme="light"
+                size="large"
+                value={inputValue}
+            />
+            <div className={styles.emojiContainer} ref={emojiPickerRef}>
+                <Icon
+                    icon="user-follow"
+                    size="lg"
+                    className={styles.icon}
+                    onClick={() => setIsEmojiOpen(!isEmojiOpen)}
+                />
+                <div className={styles.emoji}>
+                    <EmojiPicker
+                        className={styles.emojiPicker}
+                        open={isEmojiOpen}
+                        onEmojiClick={handleEmoji}
+                    />
+                </div>
+            </div>
+            <Button
+                type="secondary"
+                onClick={handleSubmit}
+                theme="light"
+                text="Отправить 📫"
+                className={styles.sendButton}
+            />
         </div>
-      </div>
-      <Button
-        type="secondary"
-        onClick={handleSubmit}
-        theme="light"
-        text="Отправить 📫"
-        className={styles.sendButton}
-      />
-    </div>
-  );
+    );
 };

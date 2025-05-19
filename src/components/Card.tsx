@@ -1,6 +1,4 @@
-
-function Card(){
-    
+function Card () {
 
 }
 export default Card;

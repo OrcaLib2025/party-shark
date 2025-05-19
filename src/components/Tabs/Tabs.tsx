@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { TabsProps } from "../../utils/models/tabs";
+import { useEffect, useState } from 'react';
+
+import { TabsProps } from '../../utils/models/tabs';
 import cl from './Tabs.module.scss';
 
 export const Tabs: React.FC<TabsProps> = ({

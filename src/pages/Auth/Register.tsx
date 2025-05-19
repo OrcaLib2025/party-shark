@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import cl from './Auth.module.scss';
-import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
-import { auth, db } from '../../firebase';
-import { Input } from "../../components/Input";
-import { Button } from "../../components/Button"
-import { useDispatch } from "react-redux";
-import { setAuth } from "../../redux/actions/auth";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+import { Button } from '../../components/Button';
+import { Input } from '../../components/Input';
+import { auth, db } from '../../firebase';
+import { setAuth } from '../../redux/actions/auth';
+import cl from './Auth.module.scss';
 
 export const Register: React.FC = () => {
     const dispatch = useDispatch();
@@ -33,17 +33,16 @@ export const Register: React.FC = () => {
         setIsLoading(true);
 
         try {
-            const res = await createUserWithEmailAndPassword(auth, email, password)
+            const res = await createUserWithEmailAndPassword(auth, email, password);
             dispatch(setAuth(true));
 
-                await setDoc(doc(db, "users", res.user.uid), {
-                    username,
-                    email,
-                    id: res.user.uid,
-                    blocked: [],
-                });
+            await setDoc(doc(db, 'users', res.user.uid), {
+                username,
+                email,
+                id: res.user.uid,
+                blocked: [],
+            });
             navigate('/');
-
         } catch (error) {
             console.log(error);
         } finally {

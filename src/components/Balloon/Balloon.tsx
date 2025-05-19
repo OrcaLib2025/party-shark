@@ -1,6 +1,5 @@
-import React from 'react';
-
 import classnames from 'classnames';
+import React from 'react';
 
 import cl from './Balloon.module.scss';
 
@@ -24,7 +23,8 @@ export const Balloon: React.FC<BalloonProps> = ({
                 photo
                     ? (
                         <img src={photo} width={120} height={120}/>
-                    ) : undefined
+                    )
+                    : undefined
             }
             <h3>
                 {title}

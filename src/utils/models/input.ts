@@ -11,4 +11,4 @@ export interface InputProps {
     theme: 'light' | 'dark';
     classNames?: string;
     label?: string;
-}   
+}

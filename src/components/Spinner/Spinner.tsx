@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import cl from './Spinner.module.scss';
 
 export const Spinner: React.FC = () => {

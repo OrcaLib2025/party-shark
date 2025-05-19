@@ -10,45 +10,18 @@
     display: flex;
     flex-direction: column;
 
-    &.currentUser {
+    &--current-user {
         margin-left: auto;
         align-items: flex-end;
-        
-        .content {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-        
-        .sender {
-            color: colors.$text-primary;
-            padding-right: 8px;
-            justify-content: flex-end;
-            
-            &::before {
-                display: none;
-            }
-            
-            &::after {
-                content: 'Вы';
-                margin-left: 6px;
-                font-weight: 500;
-                opacity: 0.8;
-            }
-        }
     }
-    
-    &.notCurrentUser {
+
+    &--not-current-user {
         margin-right: auto;
         align-items: flex-start;
-        
-        .content {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
     }
 }
 
-.sender {
+.message__sender {
     font-weight: 600;
     margin-bottom: 6px;
     font-size: 0.85rem;
@@ -56,7 +29,7 @@
     display: flex;
     align-items: center;
     padding-left: 8px;
-    
+
     &::before {
         content: '';
         display: inline-block;
@@ -66,9 +39,16 @@
         border-radius: 50%;
         margin-right: 8px;
     }
+
+    &::after {
+        content: 'Вы';
+        margin-left: 6px;
+        font-weight: 500;
+        opacity: 0.8;
+    }
 }
 
-.content {
+.message__content {
     padding: 12px 16px;
     border-radius: 18px;
     position: relative;
@@ -77,67 +57,70 @@
     box-shadow: 0 2px 6px rgba(colors.$blue-deep, 0.1);
     width: fit-content;
     max-width: 100%;
-}
 
-.currentUser .content {
-    background: linear-gradient(135deg, colors.$blue 0%, colors.$blue-icon 100%);
-    color: colors.$text-primary-light;
-    box-shadow: 0 2px 8px rgba(colors.$blue, 0.3);
-    
-    &::after {
-        content: '';
-        position: absolute;
-        right: -6px;
-        top: 0;
-        width: 12px;
-        height: 12px;
+    &--current-user {
         background: linear-gradient(135deg, colors.$blue 0%, colors.$blue-icon 100%);
-        clip-path: polygon(0 0, 100% 0, 100% 100%);
-    }
-}
+        color: colors.$text-primary-light;
+        box-shadow: 0 2px 8px rgba(colors.$blue, 0.3);
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
 
-.notCurrentUser .content {
-    background: rgba(colors.$lightest-blue, 0.95);
-    color: colors.$text-primary;
-    box-shadow: 0 2px 6px rgba(colors.$blue-deep, 0.1);
-    
-    &::before {
-        content: '';
-        position: absolute;
-        left: -6px;
-        top: 0;
-        width: 12px;
-        height: 12px;
+        &::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, colors.$blue 0%, colors.$blue-icon 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+    }
+
+    &--not-current-user {
         background: rgba(colors.$lightest-blue, 0.95);
-        clip-path: polygon(0 0, 0% 100%, 100% 0);
+        color: colors.$text-primary;
+        box-shadow: 0 2px 6px rgba(colors.$blue-deep, 0.1);
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: rgba(colors.$lightest-blue, 0.95);
+            clip-path: polygon(0 0, 0% 100%, 100% 0);
+        }
     }
 }
 
-.text {
+.message__text {
     font-size: 0.95rem;
     position: relative;
     padding-right: 40px;
 }
 
-.time {
+.message__time {
     font-size: 0.75rem;
     opacity: 0.8;
     position: absolute;
     right: 8px;
     bottom: 4px;
+
+    .message--current-user & {
+        color: rgba(colors.$text-white, 0.8);
+    }
+
+    .message--not-current-user & {
+        color: rgba(colors.$text-primary, 0.7);
+    }
 }
 
-.currentUser .time {
-    color: rgba(colors.$text-white, 0.8);
-}
-
-.notCurrentUser .time {
-    color: rgba(colors.$text-primary, 0.7);
-}
-
-.textImage {
+.message__image {
     width: 100%;
-    max-width: 400px;
     height: auto;
     max-height: 300px;
     border-radius: 10px;
@@ -145,15 +128,9 @@
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     margin-bottom: 8px;
-
-    &:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
 }
 
-/* Стили для превью изображения */
-.imagePreview {
+.message__preview {
     position: fixed;
     top: 0;
     left: 0;
@@ -176,7 +153,7 @@
     }
 }
 
-.closePreview {
+.message__close-preview {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -193,11 +170,6 @@
     justify-content: center;
     border-radius: 50%;
 
-    &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.1);
-    }
-
     span {
         position: relative;
         top: -2px;
@@ -205,6 +177,11 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

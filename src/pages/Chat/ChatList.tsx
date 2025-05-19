@@ -1,140 +1,141 @@
+import { Timestamp } from 'firebase/firestore';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import avatarImage from '../../assets/pictures/avatar.png';
+import avatarGroupImage from '../../assets/pictures/group-avatar.png';
+import { ChatItem } from '../../components/ChatItem';
 import { Icon } from '../../components/Icon';
 import { Input } from '../../components/Input';
-import styles from './ChatList.module.scss';
-import { ChatItem } from '../../components/ChatItem';
-import avatarImage from '../../assets/pictures/avatar.png'
-import avatarGroupImage from '../../assets/pictures/group-avatar.png'
-import { Timestamp } from 'firebase/firestore';
-import { useNavigate } from "react-router-dom";
 import { IChatItem } from '../../utils/models/Chat';
+import styles from './ChatList.module.scss';
 
 const mockChats: IChatItem[] = [
     {
         chatId: 1,
-        sender: "Команда PartyShark",
-        lastMessage: "Готовим новый функционал!",
+        sender: 'Команда PartyShark',
+        lastMessage: 'Готовим новый функционал!',
         isGroup: true,
         unreadCount: 5,
         type: 'event',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1710000000, 0),
-        isOnline: false
+        isOnline: false,
     },
     {
         chatId: 2,
-        sender: "Алексей (Яхт-клуб)",
-        lastMessage: "Завтра выходим в море в 9:00",
+        sender: 'Алексей (Яхт-клуб)',
+        lastMessage: 'Завтра выходим в море в 9:00',
         isGroup: false,
         unreadCount: 0,
         type: 'private',
         profilePicture: avatarImage,
         messageTime: new Timestamp(1709990000, 0),
-        isOnline: true
+        isOnline: true,
     },
     {
         chatId: 3,
         sender: "Морской клуб 'Волна'",
-        lastMessage: "Регистрация на регату открыта!",
+        lastMessage: 'Регистрация на регату открыта!',
         isGroup: true,
         unreadCount: 12,
         type: 'event',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1709900000, 0),
-        isOnline: false
+        isOnline: false,
     },
     {
         chatId: 4,
-        sender: "Марина",
-        lastMessage: "Привет! Как твои дела?",
+        sender: 'Марина',
+        lastMessage: 'Привет! Как твои дела?',
         isGroup: false,
         unreadCount: 2,
         type: 'private',
         profilePicture: avatarImage,
         messageTime: new Timestamp(1709890000, 0),
-        isOnline: true
+        isOnline: true,
     },
     {
         chatId: 5,
-        sender: "Рыбацкий чат",
-        lastMessage: "Кто едет на рыбалку в субботу?",
+        sender: 'Рыбацкий чат',
+        lastMessage: 'Кто едет на рыбалку в субботу?',
         isGroup: true,
         unreadCount: 0,
         type: 'group',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1709800000, 0),
-        isOnline: false
+        isOnline: false,
     },
     {
         chatId: 6,
-        sender: "Иван Петров",
-        lastMessage: "Отправил тебе документы",
+        sender: 'Иван Петров',
+        lastMessage: 'Отправил тебе документы',
         isGroup: false,
         unreadCount: 1,
         type: 'private',
         profilePicture: avatarImage,
         messageTime: new Timestamp(1709750000, 0),
-        isOnline: false
+        isOnline: false,
     },
     {
         chatId: 7,
         sender: "Фестиваль 'Море Ярко'",
-        lastMessage: "Программа фестиваля обновлена",
+        lastMessage: 'Программа фестиваля обновлена',
         isGroup: true,
         unreadCount: 7,
         type: 'event',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1709700000, 0),
-        isOnline: false
+        isOnline: false,
     },
     {
         chatId: 8,
         sender: "Ольга (Бар 'Шторм')",
-        lastMessage: "Ждем вас на нашем новом мероприятии!",
+        lastMessage: 'Ждем вас на нашем новом мероприятии!',
         isGroup: false,
         unreadCount: 0,
         type: 'private',
         profilePicture: avatarImage,
         messageTime: new Timestamp(1709650000, 0),
-        isOnline: true
+        isOnline: true,
     },
     {
         chatId: 9,
-        sender: "Чат дайверов",
-        lastMessage: "Новые места для дайвинга в этом сезоне",
+        sender: 'Чат дайверов',
+        lastMessage: 'Новые места для дайвинга в этом сезоне',
         isGroup: true,
         unreadCount: 3,
         type: 'group',
         profilePicture: avatarGroupImage,
         messageTime: new Timestamp(1709600000, 0),
-        isOnline: false
+        isOnline: false,
     },
     {
         chatId: 10,
-        sender: "Сергей (Инструктор)",
-        lastMessage: "Завтра в 10:00 тренировка",
+        sender: 'Сергей (Инструктор)',
+        lastMessage: 'Завтра в 10:00 тренировка',
         isGroup: false,
         unreadCount: 0,
         type: 'private',
         profilePicture: avatarImage,
         messageTime: new Timestamp(1709550000, 0),
-        isOnline: false
-    }
+        isOnline: false,
+    },
 ];
 
 export const ChatList = () => {
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
-    const [activeChatId, ] = useState<number | null>(null);
+    const [activeChatId] = useState<number | null>(null);
     const [filter, setFilter] = useState<'all' | 'private' | 'groups' | 'events'>('all');
 
     const handleSearchValue = (value: string) => {
         setSearchValue(value);
-    }
+    };
 
     const handleMessenger = () => {
-        navigate('/messenger')
-    }
+        navigate('/messenger');
+    };
 
     const filteredChats = mockChats.filter(chat => {
         const matchesSearch = chat.sender.toLowerCase().includes(searchValue.toLowerCase());
@@ -169,7 +170,7 @@ export const ChatList = () => {
                     <Icon
                         icon="arrow-reverse"
                         className={styles.sortIcon}
-                        onClick={() => {/* Логика сортировки */ }}
+                        onClick={() => { /* Логика сортировки */ }}
                     />
                 </div>
 

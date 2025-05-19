@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import cl from './Authorization.module.scss';
-import Register from '../Auth/Register';
 import Login from '../Auth/Login';
+import Register from '../Auth/Register';
+import cl from './Authorization.module.scss';
 
 export const Authorization: React.FC = () => {
     const [isLog, setIsLog] = useState(true);
@@ -11,16 +11,20 @@ export const Authorization: React.FC = () => {
         <div className={cl['sss']}>
             <div className={cl['authoriz']}>
                 {
-                    isLog ? (
-                        <Login />
-                    ) : <Register />
+                    isLog
+                        ? (
+                            <Login />
+                        )
+                        : <Register />
                 }
 
                 <p>
                     {
-                        isLog ? (
-                            'Нет аккаунта?'
-                        ) : 'Есть аккаунт?'
+                        isLog
+                            ? (
+                                'Нет аккаунта?'
+                            )
+                            : 'Есть аккаунт?'
                     }
                     {' '}
                     <a
@@ -34,5 +38,5 @@ export const Authorization: React.FC = () => {
                 </p>
             </div>
         </div>
-    )
+    );
 };

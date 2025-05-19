@@ -1,6 +1,6 @@
-import styles from './ChatItem.module.scss'
-import { formatTime } from '../../utils/services/timeUitl'
-import { IChatItem } from '../../utils/models/Chat'
+import { IChatItem } from '../../utils/models/Chat';
+import { formatTime } from '../../utils/services/timeUitl';
+import styles from './ChatItem.module.scss';
 
 interface ChatItemProps {
     chatItem: IChatItem;
@@ -36,11 +36,13 @@ export const ChatItem: React.FC<ChatItemProps> = ({ chatItem, isActive = false, 
                     <p className={styles.lastMessage}>
                         {chatItem.lastMessage}
                     </p>
-                    {chatItem.unreadCount ? (
-                        <span className={styles.unreadBadge}>{chatItem.unreadCount}</span>
-                    ): null}
+                    {chatItem.unreadCount
+                        ? (
+                            <span className={styles.unreadBadge}>{chatItem.unreadCount}</span>
+                        )
+                        : null}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

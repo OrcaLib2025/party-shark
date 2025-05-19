@@ -1,9 +1,7 @@
-
-function Food(){
-
-    const food1 = "Okroshka";
-    const food2 = "Water with vinegar"
-    return(
+function Food () {
+    const food1 = 'Okroshka';
+    const food2 = 'Water with vinegar';
+    return (
         <>
             <ul>
                 <li>Apple</li>
@@ -15,4 +13,4 @@ function Food(){
     );
 }
 
-export default Food
+export default Food;

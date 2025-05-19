@@ -1,7 +1,8 @@
-import React from 'react';
-import cl from './Icon.module.scss';
 import classnames from 'classnames';
+import React from 'react';
+
 import { IconProps } from '../../utils/models/icon';
+import cl from './Icon.module.scss';
 
 export const Icon: React.FC<IconProps> = ({
     icon,
@@ -15,7 +16,7 @@ export const Icon: React.FC<IconProps> = ({
         cl['icon'],
         cl[`icon-${icon}`],
         cl[`icon--${size}`],
-        { [cl['icon--disabled']]: disabled, },
+        { [cl['icon--disabled']]: disabled },
         className,
     );
 

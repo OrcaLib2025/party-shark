@@ -1,14 +1,11 @@
-import { ChatHeader } from "../../components/ChatHeader"
-import { MessageInput } from "../../components/MessageInput";
-import { MessageList } from "../../components/MessageList";
-import { ChatList } from "./ChatList";
-import styles from "./Chat.module.scss";
+import styles from './Chat.module.scss';
+import { ChatList } from './ChatList';
 
 export const Chat = () => {
-    return(
+    return (
         <div className={styles.container}>
             <ChatList />
-            
+
             {/* <ChatHeader />
             <MessageList />
             <MessageInput /> */}

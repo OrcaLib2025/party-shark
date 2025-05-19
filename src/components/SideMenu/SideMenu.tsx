@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import './SideMenu.scss';
 
 import { signOut } from 'firebase/auth';
-import { auth } from "../../firebase"
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { auth } from '../../firebase';
 import { Button } from '../Button';
 
 export const SideMenu: React.FC = () => {
@@ -13,34 +14,33 @@ export const SideMenu: React.FC = () => {
     const [isAuthOpen, setIsAuthOpen] = useState(false);
 
     const handleHomePage = () => {
-        void navigation("/");
+        navigation('/');
     };
 
     const handleErrorPage = () => {
-        void navigation("/bebebesbababa");
+        navigation('/bebebesbababa');
     };
 
     const handleChatPage = () => {
-        void navigation("/chat");
+        navigation('/chat');
     };
 
     const handleMapPage = () => {
-        void navigation('/map');
+        navigation('/map');
     };
 
     const handleLogOutUser = async () => {
         try {
             await signOut(auth);
-            void navigation('/');
+            navigation('/');
         } catch (error) {
-            console.error("Logout failed: ", error);
+            console.error('Logout failed: ', error);
         }
     };
 
-
     const handleAuthorization = () => {
-        void navigation('/authorization');
-    }
+        navigation('/authorization');
+    };
 
     return (
         <div className='menu-overview'>
@@ -49,37 +49,41 @@ export const SideMenu: React.FC = () => {
                     <h1>PartyShark</h1>
                 </div>
                 {
-                    isAuthOpen ? (
-                        <div
-                            role="presentation"
-                            className='auth-body'
-                            onClick={handleAuthorization}
-                        >
-                            {
-                                !isAuth && (
-                                    <div className='user-profile'>
-                                        <div className='head' />
-                                        <div className='body' />
-                                    </div>
-                                )
-                            }
-                            {isAuth && <div>ТУТ ИКОНКУ ЮЗЕРА</div>}
+                    isAuthOpen
+                        ? (
+                            <div
+                                role="presentation"
+                                className='auth-body'
+                                onClick={handleAuthorization}
+                            >
+                                {
+                                    !isAuth && (
+                                        <div className='user-profile'>
+                                            <div className='head' />
+                                            <div className='body' />
+                                        </div>
+                                    )
+                                }
+                                {isAuth && <div>ТУТ ИКОНКУ ЮЗЕРА</div>}
 
-                            <span>
+                                <span>
                                 Sign in
-                            </span>
-                        </div>
-                    ) : null
+                                </span>
+                            </div>
+                        )
+                        : null
                 }
                 <div className='auth-container'>
                     <div
                         className='auth-container__button'
-                        onClick={() => { setIsAuthOpen(!isAuthOpen) }}
+                        onClick={() => { setIsAuthOpen(!isAuthOpen); }}
                     >
                         {
-                            isAuthOpen ? (
-                                'Close'
-                            ) : 'Sign in'
+                            isAuthOpen
+                                ? (
+                                    'Close'
+                                )
+                                : 'Sign in'
                         }
                     </div>
                 </div>
@@ -98,4 +102,4 @@ export const SideMenu: React.FC = () => {
             </div>
         </div>
     );
-}
+};

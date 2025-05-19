@@ -1,8 +1,8 @@
 import React from 'react';
-import { Marker } from '../../utils/models/MarkerData';
-
-import cl from './SideMarkInfo.module.scss';
 import { useNavigate } from 'react-router-dom';
+
+import { Marker } from '../../utils/models/MarkerData';
+import cl from './SideMarkInfo.module.scss';
 
 interface SideMarkInfo {
     onClose: () => void,

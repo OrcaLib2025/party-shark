@@ -1,1 +1,1 @@
-export {ChatInfoPopup} from './ChatInfoPopup'
+export { ChatInfoPopup } from './ChatInfoPopup';

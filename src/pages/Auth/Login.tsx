@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
 import {
     GoogleAuthProvider,
     signInWithEmailAndPassword,
-    signInWithPopup
- } from 'firebase/auth'
+    signInWithPopup,
+} from 'firebase/auth';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { Button } from '../../components/Button';
+import { Input } from '../../components/Input';
 import { auth, provider } from '../../firebase';
-import { Input } from "../../components/Input";
-import { Button } from "../../components/Button"
+import { setAuth } from '../../redux/actions/auth';
 import cl from './Auth.module.scss';
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setAuth } from "../../redux/actions/auth";
 
 export const Login = () => {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChangeEmail = (value: string) => {
         setEmail(value);
@@ -45,15 +46,15 @@ export const Login = () => {
     };
     const handleGoogleSignIn = async () => {
         signInWithPopup(auth, provider)
-        .then((result) => {
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            const user = result.user;
-            navigate('/');
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential?.accessToken;
+                const user = result.user;
+                navigate('/');
+            }).catch((error) => {
+                console.log(error);
+            });
+    };
 
     return (
         <div className={cl['container']}>
@@ -89,6 +90,6 @@ export const Login = () => {
             />
         </div>
     );
-}
+};
 
 export default Login;
