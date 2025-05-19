@@ -1,6 +1,7 @@
-import { Timestamp } from 'firebase/firestore';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { Timestamp } from 'firebase/firestore';
 
 import avatarImage from '../../assets/pictures/avatar.png';
 import avatarGroupImage from '../../assets/pictures/group-avatar.png';
@@ -8,6 +9,7 @@ import { ChatItem } from '../../components/ChatItem';
 import { Icon } from '../../components/Icon';
 import { Input } from '../../components/Input';
 import { IChatItem } from '../../utils/models/Chat';
+
 import styles from './ChatList.module.scss';
 
 const mockChats: IChatItem[] = [

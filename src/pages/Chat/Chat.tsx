@@ -1,5 +1,6 @@
-import styles from './Chat.module.scss';
 import { ChatList } from './ChatList';
+
+import styles from './Chat.module.scss';
 
 export const Chat = () => {
     return (

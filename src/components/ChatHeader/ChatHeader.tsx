@@ -4,6 +4,7 @@ import avatar from '../../assets/pictures/avatar.png';
 import image from '../../assets/pictures/group-avatar.png';
 import { ChatMember } from '../../utils/models/Chat';
 import { ChatInfoPopup } from '../ChatInfoPopup';
+
 import styles from './ChatHeader.module.scss';
 interface ChatHeaderProps {
   title: string;

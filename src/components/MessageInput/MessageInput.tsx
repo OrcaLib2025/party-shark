@@ -1,9 +1,10 @@
-import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 
 import { Button } from '../Button';
 import { Icon } from '../Icon';
 import { Input } from '../Input';
+
 import styles from './MessageInput.module.scss';
 
 export const MessageInput = () => {

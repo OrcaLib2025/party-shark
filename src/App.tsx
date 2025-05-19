@@ -1,8 +1,7 @@
-import './App.scss';
-
-import { onAuthStateChanged, User } from 'firebase/auth';
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 import SideMenu from './components/SideMenu';
 import { auth } from './firebase';
@@ -12,6 +11,8 @@ import { Messenger } from './pages/Chat/Messenger';
 import { EventPage } from './pages/Events';
 import { Map } from './pages/Map';
 import { AddNewEvent } from './pages/Map/router/AddNewEvent';
+
+import './App.scss';
 
 function App () {
     const [user, setUser] = useState<User | null>(null);

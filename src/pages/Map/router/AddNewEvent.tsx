@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Icon } from '../../../components/Icon';
 import { IParty } from '../../../utils/models/MarkerData';
+
 import styles from './AddNewEvent.module.scss';
 
 export const AddNewEvent: React.FC = () => {

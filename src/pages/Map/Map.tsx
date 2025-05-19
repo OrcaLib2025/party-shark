@@ -1,13 +1,13 @@
-import 'leaflet/dist/leaflet.css';
-
+import React, { useState } from 'react';
 import L, { LatLng } from 'leaflet';
 import { Modal } from 'orcalib-ui-kit';
-import React, { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
 import { SideMarkInfo } from '../../components/SideMarkInfo';
 import { IParty } from '../../utils/models/MarkerData';
+
+import 'leaflet/dist/leaflet.css';
 import cl from './Map.module.scss';
 
 const customIcon = new L.Icon({

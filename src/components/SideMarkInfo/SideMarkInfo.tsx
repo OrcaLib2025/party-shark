@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Marker } from '../../utils/models/MarkerData';
+
 import cl from './SideMarkInfo.module.scss';
 
 interface SideMarkInfo {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Login from '../Auth/Login';
 import Register from '../Auth/Register';
+
 import cl from './Authorization.module.scss';
 
 export const Authorization: React.FC = () => {

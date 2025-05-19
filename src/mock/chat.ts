@@ -1,5 +1,5 @@
-import { MockChat } from '../utils/models/Chat';
 import avatar from '../assets/pictures/avatar.png';
+import { MockChat } from '../utils/models/Chat';
 
 export const mockChat: MockChat = {
     title: 'Морской клуб "Алые Паруса"',

@@ -1,7 +1,8 @@
-import { mockChat } from '../../mock/chat';
 import { ChatHeader } from '../../components/ChatHeader';
 import { MessageInput } from '../../components/MessageInput';
 import { MessageList } from '../../components/MessageList';
+import { mockChat } from '../../mock/chat';
+
 import styles from './Chat.module.scss';
 
 export const Messenger = () => {

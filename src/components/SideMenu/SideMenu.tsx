@@ -1,11 +1,12 @@
-import './SideMenu.scss';
-
-import { signOut } from 'firebase/auth';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { signOut } from 'firebase/auth';
+
 import { auth } from '../../firebase';
 import { Button } from '../Button';
+
+import './SideMenu.scss';
 
 export const SideMenu: React.FC = () => {
     const navigation = useNavigate();

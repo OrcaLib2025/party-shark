@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import {
     GoogleAuthProvider,
     signInWithEmailAndPassword,
     signInWithPopup,
 } from 'firebase/auth';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { auth, provider } from '../../firebase';
 import { setAuth } from '../../redux/actions/auth';
+
 import cl from './Auth.module.scss';
 
 export const Login = () => {

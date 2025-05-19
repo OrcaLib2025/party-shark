@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { ChatMember } from '../../utils/models/Chat';
 import { Icon } from '../Icon';
+
 import styles from './ChatInfoPopup.module.scss';
 
 interface IChatInfoPopup {

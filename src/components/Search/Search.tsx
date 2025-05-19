@@ -1,8 +1,9 @@
-import classnames from 'classnames';
 import React from 'react';
+import classnames from 'classnames';
 
 import { SearchProps } from '../../utils/models/search';
 import { Icon } from '../Icon';
+
 import cl from './Search.module.scss';
 
 export const Search: React.FC<SearchProps> = ({
