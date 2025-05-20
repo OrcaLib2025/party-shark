@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { signOut } from 'firebase/auth';
 
@@ -34,6 +35,7 @@ export const SideMenu: React.FC = () => {
         try {
             await signOut(auth);
             navigation('/');
+            toast.info('Вы вышли из аккаунта');
         } catch (error) {
             console.error('Logout failed: ', error);
         }

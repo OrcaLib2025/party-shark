@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { onAuthStateChanged, User } from 'firebase/auth';
 
+import { Notification } from './components/Notification';
 import SideMenu from './components/SideMenu';
 import { auth } from './firebase';
 import { Authorization } from './pages/Authorization';
@@ -65,6 +66,7 @@ function App () {
                                 : undefined
                         }
                     </Routes>
+                    <Notification />
                 </div>
             </div>
         </div>

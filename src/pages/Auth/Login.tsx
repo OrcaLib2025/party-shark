@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import {
     GoogleAuthProvider,
@@ -40,8 +41,10 @@ export const Login = () => {
                 .then(void dispatch(setAuth(true)))
                 .catch(void dispatch(setAuth(false)));
             navigate('/');
+            toast.success('Успешно!');
         } catch (error) {
             console.log(error);
+            toast.error('Ошибка');
         } finally {
             setIsLoading(false);
         }
@@ -53,8 +56,10 @@ export const Login = () => {
                 const token = credential?.accessToken;
                 const user = result.user;
                 navigate('/');
+                toast.success('Успешно!');
             }).catch((error) => {
                 console.log(error);
+                toast.error('Произошла ошибка');
             });
     };
 

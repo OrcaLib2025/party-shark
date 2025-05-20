@@ -70,6 +70,7 @@ module.exports = {
         'src/utils/request.ts',
         'src/utils/iconMap.ts',
         'assets/',
+        'AppWrite/',
         'vite.config.ts',
         'node_modules/',
         'dist/',

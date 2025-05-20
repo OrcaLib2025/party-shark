@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import avatar from '../../assets/pictures/avatar.png';
-import image from '../../assets/pictures/group-avatar.png';
+import avatar from '../../../public/img/avatar.png';
+import image from '../../../public/img/group-avatar.png';
 import { ChatMember } from '../../utils/models/Chat';
 import { ChatInfoPopup } from '../ChatInfoPopup';
 
