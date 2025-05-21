@@ -24,3 +24,6 @@ declare module '*.png' {
   const PNG: React.VFC<React.ImgHTMLAttributes>;
   export default PNG;
 }
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

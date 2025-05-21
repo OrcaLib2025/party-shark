@@ -9,7 +9,7 @@ import { getStorage } from 'firebase/storage';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: 'AIzaSyDzWKYPy0wRs1L6vRbH0w-aHu1Y-O84BmI',
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
     authDomain: 'partyshark-f73dd.firebaseapp.com',
     projectId: 'partyshark-f73dd',
     storageBucket: 'partyshark-f73dd.firebasestorage.app',

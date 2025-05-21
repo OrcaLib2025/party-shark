@@ -71,6 +71,7 @@ module.exports = {
         'src/utils/iconMap.ts',
         'assets/',
         'AppWrite/',
+        '.eslintrc.cjs',
         'vite.config.ts',
         'node_modules/',
         'dist/',
