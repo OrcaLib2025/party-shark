@@ -10,3 +10,8 @@ export interface User {
     username: string;
     uid: string;
 };
+
+export interface ProfilePicture {
+    file: File;
+    url: string;
+};
