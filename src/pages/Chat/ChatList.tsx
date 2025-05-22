@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { Timestamp } from 'firebase/firestore';
 
-import avatarImage from '../../assets/pictures/avatar.png';
-import avatarGroupImage from '../../assets/pictures/group-avatar.png';
+import avatarImage from '../../../public/img/avatar.png';
+import avatarGroupImage from '../../../public/img/group-avatar.png';
 import { ChatItem } from '../../components/ChatItem';
 import { Icon } from '../../components/Icon';
 import { Input } from '../../components/Input';

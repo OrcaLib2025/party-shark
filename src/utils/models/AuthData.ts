@@ -4,3 +4,14 @@ export interface FormData {
     password: string;
     error?: Error | null;
 };
+
+export interface User {
+    profilePicture?: string;
+    username: string;
+    uid: string;
+};
+
+export interface ProfilePicture {
+    file: File;
+    url: string;
+};

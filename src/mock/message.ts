@@ -1,4 +1,4 @@
-import image from '../assets/pictures/avatar.png';
+import image from '../../public/img/avatar.png';
 
 export const mockMessages = [
     {

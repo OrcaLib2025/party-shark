@@ -44,6 +44,9 @@ export const Register: React.FC = () => {
                 id: res.user.uid,
                 blocked: [],
             });
+            await setDoc(doc(db, 'userchats', res.user.uid), {
+                chats: [],
+            });
             navigate('/');
         } catch (error) {
             console.log(error);

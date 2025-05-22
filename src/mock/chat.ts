@@ -1,4 +1,4 @@
-import avatar from '../assets/pictures/avatar.png';
+import avatar from '../../public/img/avatar.png';
 import { MockChat } from '../utils/models/Chat';
 
 export const mockChat: MockChat = {

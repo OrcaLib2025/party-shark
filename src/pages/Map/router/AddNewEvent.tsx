@@ -3,6 +3,7 @@ import { addHours } from 'date-fns';
 import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { Icon } from '../../../components/Icon';
 import { createParty } from '../../../redux/actions/marker';
@@ -116,13 +117,13 @@ export const AddNewEvent: React.FC = () => {
 
     const handleSubmit = () => {
         if (!newEvent.title) {
-            alert('Заполните название мероприятия');
+            toast.error('Заполните название мероприятия');
             return;
         }
 
         const now = new Date();
         if (newEvent.endDate < now) {
-            alert('Дата окончания не может быть в прошлом');
+            toast.error('Дата окончания не может быть в прошлом');
             return;
         }
 
@@ -130,7 +131,7 @@ export const AddNewEvent: React.FC = () => {
             (slot) => slot.start >= slot.end,
         );
         if (invalidTimeSlots) {
-            alert('Все временные слоты должны иметь время начала раньше времени окончания');
+            toast.error('Все временные слоты должны иметь время начала раньше времени окончания');
             return;
         }
 
@@ -148,7 +149,7 @@ export const AddNewEvent: React.FC = () => {
 
     useEffect(() => {
         if (createdParty) {
-            alert('Мероприятие создано!');
+            toast.success('Мероприятие создано!');
             const newStart = new Date();
             const newEnd = addHours(newStart, 1);
             setNewEvent({
@@ -167,7 +168,7 @@ export const AddNewEvent: React.FC = () => {
             navigate('/map');
         }
         if (createError) {
-            alert(`Ошибка: ${createError}`);
+            toast.error(`Ошибка: ${createError}`);
         }
     }, [createdParty, createError, navigate]);
 
