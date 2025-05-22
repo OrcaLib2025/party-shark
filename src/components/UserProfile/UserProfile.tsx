@@ -183,7 +183,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                                 Настройки
                             </div>
                             <div
-                                className="menu-item logout"
+                                className="menu-item"
                                 onClick={() => {
                                     handleLogOutUser();
                                     setIsMenuOpen(false);
