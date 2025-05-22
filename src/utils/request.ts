@@ -15,7 +15,7 @@ class Request {
                 ...headers,
             },
             body: data ? JSON.stringify(data) : undefined,
-            credentials: 'include',
+            credentials: 'omit',
         });
 
         if (!response.ok) {

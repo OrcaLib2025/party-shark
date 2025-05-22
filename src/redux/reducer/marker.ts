@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IParty } from "../../utils/models/MarkerData";
 import { CREATE_PARTY, CREATE_PARTY_SUCCESS, CREATE_PARTY_FAILURE } from "../actions/marker";
 

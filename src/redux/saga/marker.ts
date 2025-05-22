@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { IParty } from '../../utils/models/MarkerData';
 import Request from '../../utils/request';

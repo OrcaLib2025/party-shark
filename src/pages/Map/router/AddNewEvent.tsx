@@ -1,27 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { addHours } from 'date-fns';
+import { formatInTimeZone, toZonedTime } from 'date-fns-tz';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { Icon } from '../../../components/Icon';
+import { createParty } from '../../../redux/actions/marker';
+import { useSelector } from '../../../redux/store';
 import { IParty } from '../../../utils/models/MarkerData';
 
 import styles from './AddNewEvent.module.scss';
 
+type LocalParty = Omit<IParty, 'createdAt' | 'membersCount'> & {
+  endDate: Date;
+  timeSlots: { start: Date; end: Date }[];
+};
+
 export const AddNewEvent: React.FC = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { createLoading, createError, createdParty } = useSelector((state) => state.marker);
 
-    const [newEvent, setNewEvent] = useState<Partial<IParty>>({
+    const omskTimeZone = 'Asia/Omsk';
+
+    const initialEndDate = new Date();
+    const initialStart = new Date();
+    const initialEnd = addHours(initialStart, 1);
+
+    const [newEvent, setNewEvent] = useState<LocalParty>({
         title: '',
         description: '',
         geoPoint: [0, 0],
         isActive: true,
-        createdAt: new Date(),
-        endDate: new Date(),
-        timeSlots: [{ start: new Date(), end: new Date() }],
+        endDate: initialEndDate,
+        timeSlots: [{ start: initialStart, end: initialEnd }],
         maxMembers: 10,
-        membersCount: 0,
         tags: [],
         isPaid: false,
     });
+    const [timeSlotErrors, setTimeSlotErrors] = useState<string[]>([]);
+    const [endDateError, setEndDateError] = useState<string>('');
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -41,19 +59,37 @@ export const AddNewEvent: React.FC = () => {
         index?: number,
     ) => {
         const { value } = e.target;
-        const date = new Date(value);
+        const date = toZonedTime(value, omskTimeZone);
 
         if (index !== undefined && field !== 'endDate') {
             setNewEvent((prev) => {
-                const updatedTimeSlots = [...(prev.timeSlots || [])];
+                const updatedTimeSlots = [...prev.timeSlots];
                 updatedTimeSlots[index] = {
                     ...updatedTimeSlots[index],
                     [field]: date,
                 };
+
+                const errors = [...timeSlotErrors];
+                if (updatedTimeSlots[index].start >= updatedTimeSlots[index].end) {
+                    errors[index] = 'Время начала должно быть раньше времени окончания';
+                } else {
+                    errors[index] = '';
+                }
+                setTimeSlotErrors(errors);
+
                 return { ...prev, timeSlots: updatedTimeSlots };
             });
         } else {
-            setNewEvent((prev) => ({ ...prev, [field]: date }));
+            setNewEvent((prev) => {
+                const newState = { ...prev, [field]: date };
+                const now = new Date();
+                if (date < now) {
+                    setEndDateError('Дата окончания не может быть в прошлом');
+                } else {
+                    setEndDateError('');
+                }
+                return newState;
+            });
         }
     };
 
@@ -69,27 +105,79 @@ export const AddNewEvent: React.FC = () => {
     };
 
     const handleAddTimeSlot = () => {
+        const newStart = new Date();
+        const newEnd = addHours(newStart, 1);
         setNewEvent((prev) => ({
             ...prev,
-            timeSlots: [
-                ...(prev.timeSlots || []),
-                { start: new Date(), end: new Date() },
-            ],
+            timeSlots: [...prev.timeSlots, { start: newStart, end: newEnd }],
         }));
+        setTimeSlotErrors((prev) => [...prev, '']);
     };
 
     const handleSubmit = () => {
-        if (!newEvent.title || !newEvent.endDate) {
-            alert('Заполните обязательные поля');
+        if (!newEvent.title) {
+            alert('Заполните название мероприятия');
             return;
         }
 
-        console.log('New Event:', newEvent);
-        alert('Мероприятие создано!');
+        const now = new Date();
+        if (newEvent.endDate < now) {
+            alert('Дата окончания не может быть в прошлом');
+            return;
+        }
+
+        const invalidTimeSlots = newEvent.timeSlots.some(
+            (slot) => slot.start >= slot.end,
+        );
+        if (invalidTimeSlots) {
+            alert('Все временные слоты должны иметь время начала раньше времени окончания');
+            return;
+        }
+
+        const serializedEvent: Omit<IParty, 'createdAt' | 'membersCount'> = {
+            ...newEvent,
+            endDate: newEvent.endDate.toISOString(),
+            timeSlots: newEvent.timeSlots.map(slot => ({
+                start: slot.start.toString(),
+                end: slot.end.toString(),
+            })),
+        };
+
+        dispatch(createParty(serializedEvent));
     };
 
-    const formatDateTimeLocal = (date: Date): string => {
-        return date.toISOString().slice(0, 16);
+    useEffect(() => {
+        if (createdParty) {
+            alert('Мероприятие создано!');
+            const newStart = new Date();
+            const newEnd = addHours(newStart, 1);
+            setNewEvent({
+                title: '',
+                description: '',
+                geoPoint: [0, 0],
+                isActive: true,
+                endDate: new Date(),
+                timeSlots: [{ start: newStart, end: newEnd }],
+                maxMembers: 10,
+                tags: [],
+                isPaid: false,
+            });
+            setTimeSlotErrors(['']);
+            setEndDateError('');
+            navigate('/map');
+        }
+        if (createError) {
+            alert(`Ошибка: ${createError}`);
+        }
+    }, [createdParty, createError, navigate]);
+
+    const formatDateTimeLocal = (date: Date | string): string => {
+        const dateObj = typeof date === 'string' ? new Date(date) : date;
+        return formatInTimeZone(dateObj, omskTimeZone, "yyyy-MM-dd'T'HH:mm");
+    };
+
+    const getMinDateTime = () => {
+        return formatInTimeZone(new Date(), omskTimeZone, "yyyy-MM-dd'T'HH:mm");
     };
 
     return (
@@ -99,10 +187,7 @@ export const AddNewEvent: React.FC = () => {
                 className={styles['leave-button']}
                 onClick={() => navigate('/map')}
             >
-                <Icon
-                    icon="arrow-to-left-bold"
-                    size='md'
-                />
+                <Icon icon="arrow-to-left-bold" size="md" />
             </div>
 
             <h1>Создать новое мероприятие</h1>
@@ -117,6 +202,7 @@ export const AddNewEvent: React.FC = () => {
                         onChange={handleInputChange}
                         required
                         className={styles['form-input']}
+                        disabled={createLoading}
                     />
                 </div>
 
@@ -128,6 +214,7 @@ export const AddNewEvent: React.FC = () => {
                         onChange={handleInputChange}
                         rows={4}
                         className={styles['form-textarea']}
+                        disabled={createLoading}
                     />
                 </div>
 
@@ -139,8 +226,13 @@ export const AddNewEvent: React.FC = () => {
                             value={newEvent.endDate ? formatDateTimeLocal(newEvent.endDate) : ''}
                             onChange={(e) => handleDateChange(e, 'endDate')}
                             required
+                            min={getMinDateTime()}
                             className={styles['form-input']}
+                            disabled={createLoading}
                         />
+                        {endDateError && (
+                            <div className={styles['error-message']}>{endDateError}</div>
+                        )}
                     </div>
 
                     <div className={styles['form-group']}>
@@ -152,6 +244,7 @@ export const AddNewEvent: React.FC = () => {
                             onChange={handleNumberChange}
                             min="1"
                             className={styles['form-input']}
+                            disabled={createLoading}
                         />
                     </div>
                 </div>
@@ -164,6 +257,7 @@ export const AddNewEvent: React.FC = () => {
                         onChange={handleTagChange}
                         placeholder="музыка, танцы, вечеринка"
                         className={styles['form-input']}
+                        disabled={createLoading}
                     />
                 </div>
 
@@ -175,23 +269,33 @@ export const AddNewEvent: React.FC = () => {
                                 type="datetime-local"
                                 value={slot.start ? formatDateTimeLocal(slot.start) : ''}
                                 onChange={(e) => handleDateChange(e, 'start', index)}
+                                min={getMinDateTime()}
                                 className={styles['form-input']}
+                                disabled={createLoading}
                             />
                             <span className={styles['time-separator']}>до</span>
                             <input
                                 type="datetime-local"
                                 value={slot.end ? formatDateTimeLocal(slot.end) : ''}
                                 onChange={(e) => handleDateChange(e, 'end', index)}
+                                min={getMinDateTime()}
                                 className={styles['form-input']}
+                                disabled={createLoading}
                             />
+                            {timeSlotErrors[index] && (
+                                <div className={styles['error-message']}>
+                                    {timeSlotErrors[index]}
+                                </div>
+                            )}
                         </div>
                     ))}
                     <button
                         type="button"
                         className={styles['add-slot-btn']}
                         onClick={handleAddTimeSlot}
+                        disabled={createLoading}
                     >
-            + Добавить слот
+                        + Добавить слот
                     </button>
                 </div>
 
@@ -207,9 +311,10 @@ export const AddNewEvent: React.FC = () => {
                                 }))
                             }
                             className={styles['checkbox-input']}
+                            disabled={createLoading}
                         />
                         <span className={styles['checkbox-custom']}></span>
-            Платное мероприятие
+                        Платное мероприятие
                     </label>
                 </div>
             </div>
@@ -218,16 +323,33 @@ export const AddNewEvent: React.FC = () => {
                 <button
                     onClick={handleSubmit}
                     className={styles['submit-btn']}
-                    disabled={!newEvent.title}
+                    disabled={createLoading || !newEvent.title || timeSlotErrors.some((e) => e) || !!endDateError}
                 >
-          Создать мероприятие
+                    {createLoading ? 'Создание...' : 'Создать мероприятие'}
                 </button>
                 <button
                     type="button"
                     className={styles['cancel-btn']}
-                    onClick={() => setNewEvent({ title: '' })}
+                    onClick={() => {
+                        const newStart = new Date();
+                        const newEnd = addHours(newStart, 1);
+                        setNewEvent({
+                            title: '',
+                            description: '',
+                            geoPoint: [0, 0],
+                            isActive: true,
+                            endDate: new Date(),
+                            timeSlots: [{ start: newStart, end: newEnd }],
+                            maxMembers: 10,
+                            tags: [],
+                            isPaid: false,
+                        });
+                        setTimeSlotErrors(['']);
+                        setEndDateError('');
+                    }}
+                    disabled={createLoading}
                 >
-          Отмена
+                    Отмена
                 </button>
             </div>
         </div>

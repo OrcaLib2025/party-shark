@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import { mockMessages } from '../../mock/message';
 import { Message } from '../Message';
 
