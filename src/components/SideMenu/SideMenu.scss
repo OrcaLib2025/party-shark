@@ -1,9 +1,8 @@
-// components/SideMenu/SideMenu.scss
 @use '/src/styles/variables/colors';
 
 .menu-overview {
   grid-area: menu;
-  position: fixed;
+  position: static;
   height: 100%;
   max-width: 320px;
   width: 100%;
