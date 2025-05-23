@@ -9,10 +9,11 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
 } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
-import { auth, provider } from '../../firebase';
+import { auth, db, provider } from '../../firebase';
 import { setAuth } from '../../redux/actions/auth';
 
 import cl from './Auth.module.scss';
@@ -38,8 +39,17 @@ export const Login = () => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password)
-                .then(void dispatch(setAuth(true)))
+                .then(
+                )
                 .catch(void dispatch(setAuth(false)));
+            const userDoc = doc(db, 'users', auth.currentUser ? auth.currentUser.uid : '');
+            console.log(userDoc);
+            const docSnap = await getDoc(userDoc);
+            if (docSnap.exists()) {
+                console.log('Данные из Firestore:', docSnap.data());
+            } else {
+                console.log('Документ не найден!');
+            }
             navigate('/');
             toast.success('Успешно!');
         } catch (error) {

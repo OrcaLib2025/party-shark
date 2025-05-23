@@ -1,6 +1,6 @@
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-import { auth, storage } from '../../firebase';
+import { auth, storage } from '../firebase';
 
 type uploadType = {
     type: 'messagePictures' | 'profilePictures';

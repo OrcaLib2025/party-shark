@@ -1,5 +1,5 @@
 import { IChatItem } from '../../utils/models/Chat';
-import { formatTime } from '../../utils/services/timeUitl';
+import { formatTime } from '../../utils/timeUitl';
 
 import styles from './ChatItem.module.scss';
 

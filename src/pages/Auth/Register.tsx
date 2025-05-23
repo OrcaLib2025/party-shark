@@ -43,6 +43,7 @@ export const Register: React.FC = () => {
                 email,
                 id: res.user.uid,
                 blocked: [],
+                profilePicture: '',
             });
             await setDoc(doc(db, 'userchats', res.user.uid), {
                 chats: [],

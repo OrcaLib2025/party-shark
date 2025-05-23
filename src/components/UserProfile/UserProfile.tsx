@@ -1,30 +1,25 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { signOut } from 'firebase/auth';
 
 import { auth } from '../../firebase';
-import upload from '../../services/Storage/upload';
+import { User } from '../../utils/models/AuthData';
+import upload from '../../utils/upload';
 import { Icon } from '../Icon';
 
 import './UserProfile.scss';
 
 interface UserProfileProps {
-    username?: string;
-    email?: string;
-    profilePicture?: string;
-    isAuth: boolean;
+    user: User;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({
-    username,
-    email,
-    profilePicture,
-    isAuth,
-}) => {
+export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+    const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [currentProfilePicture, setCurrentProfilePicture] = useState(profilePicture);
+    const [currentProfilePicture, setCurrentProfilePicture] = useState(user.profilePicture);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -50,7 +45,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
         const file = e.target.files[0];
 
-        // Валидация файла
         if (!file.type.match('image.*')) {
             toast.error('Пожалуйста, выберите файл изображения');
             return;
@@ -81,7 +75,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             console.error('Error uploading profile picture:', error);
             toast.error('Ошибка при загрузке аватара');
             // Возвращаем предыдущее изображение при ошибке
-            setCurrentProfilePicture(profilePicture);
+            setCurrentProfilePicture(user.profilePicture);
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -111,6 +105,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // useEffect(() => {
+    //     if (currentProfilePicture) {
+    //         dispatch();
+    //     }
+    // });
 
     return (
         <div className="user-profile-container">
@@ -148,53 +148,47 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                         )
                         : (
                             <div className="default-avatar" title="Нажмите для смены аватара">
-                                {username ? username.charAt(0).toUpperCase() : 'U'}
+                                {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
                             </div>
                         )}
                 </div>
+                <div className="user-info">
+                    <span className="user-name">{user.username || 'User'}</span>
+                    {user.email && <span className="user-email">{user.email}</span>}
+                </div>
+            </div>
+            <div className="menu-icon-container" ref={menuRef}>
+                <Icon
+                    icon="dots"
+                    size="md"
+                    onClick={toggleMenu}
+                    className="menu-icon"
+                    disabled={isUploading}
+                />
 
-                {isAuth && (
-                    <div className="user-info">
-                        <span className="user-name">{username || 'User'}</span>
-                        {email && <span className="user-email">{email}</span>}
+                {isMenuOpen && (
+                    <div className="dropdown-menu">
+                        <div
+                            className="menu-item"
+                            onClick={() => {
+                                handleSettings();
+                                setIsMenuOpen(false);
+                            }}
+                        >
+                            Настройки
+                        </div>
+                        <div
+                            className="menu-item"
+                            onClick={() => {
+                                handleLogOutUser();
+                                setIsMenuOpen(false);
+                            }}
+                        >
+                            Выйти из аккаунта
+                        </div>
                     </div>
                 )}
             </div>
-
-            {isAuth && (
-                <div className="menu-icon-container" ref={menuRef}>
-                    <Icon
-                        icon="dots"
-                        size="md"
-                        onClick={toggleMenu}
-                        className="menu-icon"
-                        disabled={isUploading}
-                    />
-
-                    {isMenuOpen && (
-                        <div className="dropdown-menu">
-                            <div
-                                className="menu-item"
-                                onClick={() => {
-                                    handleSettings();
-                                    setIsMenuOpen(false);
-                                }}
-                            >
-                                Настройки
-                            </div>
-                            <div
-                                className="menu-item"
-                                onClick={() => {
-                                    handleLogOutUser();
-                                    setIsMenuOpen(false);
-                                }}
-                            >
-                                Выйти из аккаунта
-                            </div>
-                        </div>
-                    )}
-                </div>
-            )}
         </div>
     );
 };

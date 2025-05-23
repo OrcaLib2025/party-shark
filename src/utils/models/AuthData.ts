@@ -6,9 +6,11 @@ export interface FormData {
 };
 
 export interface User {
-    profilePicture?: string;
+    profilePicture?: string | undefined;
     username: string;
     uid: string;
+    blocked: [];
+    email: string;
 };
 
 export interface ProfilePicture {
