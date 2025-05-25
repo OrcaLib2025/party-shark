@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -17,7 +16,6 @@ interface UserProfileProps {
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
-    const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [currentProfilePicture, setCurrentProfilePicture] = useState(user.profilePicture);
     const [isUploading, setIsUploading] = useState(false);

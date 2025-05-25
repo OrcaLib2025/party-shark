@@ -14,7 +14,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { auth, db, provider } from '../../firebase';
-import { setAuth } from '../../redux/actions/auth';
 
 import cl from './Auth.module.scss';
 
@@ -41,7 +40,7 @@ export const Login = () => {
             await signInWithEmailAndPassword(auth, email, password)
                 .then(
                 )
-                .catch(void dispatch(setAuth(false)));
+                .catch();
             const userDoc = doc(db, 'users', auth.currentUser ? auth.currentUser.uid : '');
             console.log(userDoc);
             const docSnap = await getDoc(userDoc);

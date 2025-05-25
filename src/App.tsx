@@ -1,7 +1,9 @@
 import { Suspense, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
 import { Notification } from './components/Notification';
 import SideMenu from './components/SideMenu';
@@ -12,59 +14,85 @@ import { Messenger } from './pages/Chat/Messenger';
 import { EventPage } from './pages/Events';
 import { Map } from './pages/Map';
 import { AddNewEvent } from './pages/Map/router/AddNewEvent';
+import { clearUser, setUser } from './redux/actions/auth';
+import { useSelector } from './redux/store';
 
 import './App.scss';
 
 function App () {
-    const [user, setUser] = useState<User | null>(null);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [_, setLoading] = useState<boolean>(true);
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    const fetchUserData = async (uid: string) => {
+        try {
+            const db = getFirestore();
+            const userDoc = doc(db, 'users', uid);
+            const docSnap = await getDoc(userDoc);
+
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                dispatch(setUser({
+                    uid,
+                    email: userData.email,
+                    username: userData.username,
+                    blocked: userData.blocked || [],
+                }));
+            } else {
+                dispatch(clearUser());
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            dispatch(clearUser());
+        }
+    };
 
     useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
-            setUser(currentUser);
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            setLoading(true);
+            if (firebaseUser) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                localStorage.setItem('accessToken', firebaseUser.accessToken);
+                await fetchUserData(firebaseUser.uid);
+            } else {
+                localStorage.removeItem('accessToken');
+                dispatch(clearUser());
+            }
             setLoading(false);
-            if (user) console.log('Зарегистрирован ', user);
-            else console.log('Не зареган');
         });
 
         return () => unsubscribe();
-    }, [user]);
+    }, [dispatch]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="app">
             <div className='wrapper'>
                 <SideMenu />
-
                 <div className='div1'>
                     <Routes>
                         <Route path="/" element={<Suspense><div className=''>1</div></Suspense>} />
                         <Route path="/authorization" element={<Suspense><Authorization /></Suspense>} />
                         <Route path="/chat" element={
                             user
-                                ? (
-                                    <Suspense><Chat /></Suspense>
-                                )
-                                : (
-                                    <Navigate to='/authorization' />
-                                )
+                                ? <Suspense><Chat /></Suspense>
+                                : <Navigate to='/authorization' />
                         } />
                         <Route path="/map" element={<Suspense><Map /></Suspense>} />
                         <Route path="/groups" element={<Suspense><div>1</div></Suspense>} />
-                        <Route path="/messenger" element={<Suspense><Messenger></Messenger></Suspense>} />
+                        <Route path="/messenger" element={<Suspense><Messenger /></Suspense>} />
                         <Route path="/event/:id" element={<Suspense><EventPage /></Suspense>} />
 
-                        {
-                            user
-                                ? (
-                                    <>
-                                        <Route path='/profile' element={<div>Profile</div>} />
-                                        <Route path='/add-event' element={<AddNewEvent />} />
-                                    </>
-                                )
-                                : undefined
-                        }
+                        {user && (
+                            <>
+                                <Route path='/profile' element={<div>Profile</div>} />
+                                <Route path='/add-event' element={<AddNewEvent />} />
+                            </>
+                        )}
                     </Routes>
                     <Notification />
                 </div>

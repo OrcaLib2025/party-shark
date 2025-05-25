@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { auth } from '../../firebase';
+import { useSelector } from '../../redux/store';
 import { Button } from '../Button';
 import { UserProfile } from '../UserProfile';
 
@@ -9,6 +10,8 @@ import './SideMenu.scss';
 
 export const SideMenu: React.FC = () => {
     const navigation = useNavigate();
+
+    const { user } = useSelector((state) => state.auth);
 
     const handleHomePage = () => {
         navigation('/');
@@ -39,7 +42,12 @@ export const SideMenu: React.FC = () => {
                 {auth.currentUser
                     ? (
                         <UserProfile
-                            user= { { username: 'Jane Doe', uid: '1fgsh', email: 'psina@mail.com', blocked: [] } }
+                            user= { {
+                                username: user.username,
+                                uid: user.uid,
+                                email: user.email,
+                                blocked: user.blocked,
+                            } }
                         />
                     )
                     : (

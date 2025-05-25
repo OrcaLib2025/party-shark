@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -8,12 +7,10 @@ import { doc, setDoc } from 'firebase/firestore';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { auth, db } from '../../firebase';
-import { setAuth } from '../../redux/actions/auth';
 
 import cl from './Auth.module.scss';
 
 export const Register: React.FC = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -36,7 +33,6 @@ export const Register: React.FC = () => {
 
         try {
             const res = await createUserWithEmailAndPassword(auth, email, password);
-            dispatch(setAuth(true));
 
             await setDoc(doc(db, 'users', res.user.uid), {
                 username,
