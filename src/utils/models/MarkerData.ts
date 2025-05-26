@@ -1,5 +1,6 @@
 export interface IParty {
   id?: string;
+  uid?: string;
   img?: string;
   title: string;
   description?: string;

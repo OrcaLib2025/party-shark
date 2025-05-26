@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import L, { LatLng } from 'leaflet';
-import { Modal } from 'orcalib-ui-kit';
+import { Spinner } from 'orcalib-ui-kit';
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { SideMarkInfo } from '../../components/SideMarkInfo';
+import { getAllParties } from '../../redux/actions/marker';
+import { useSelector } from '../../redux/store';
 import { IParty } from '../../utils/models/MarkerData';
 
 import 'leaflet/dist/leaflet.css';
@@ -13,7 +16,7 @@ import cl from './Map.module.scss';
 const customIcon = new L.Icon({
     iconUrl: '/icons/marker.svg',
     iconSize: [40, 56],
-    iconAnchor: [12, 41],
+    iconAnchor: [22, 43],
     popupAnchor: [0, -41],
 });
 
@@ -24,27 +27,14 @@ const mapContainerStyle = {
 
 const defaultCenter: [number, number] = [55, 73.36];
 
-const markersData: IParty[] = [
-    {
-        id: '1',
-        geoPoint: [55, 73.36],
-        title: 'Объект 1',
-        description: 'Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ТекстТекст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ТекстТекст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ТекстТекст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст Текст ',
-        author: 'Иван Иванов',
-        createdAt: new Date(),
-        img: 'img/Seat.svg',
-        tags: ['Вечеринка', 'Пикми', 'Бомбардино Крокодило'],
-    },
-];
-
 interface ContextMenuState {
-  coords: [number, number];
-  latlng: [number, number];
-  isActive: boolean;
+    coords: [number, number];
+    latlng: [number, number];
+    isActive: boolean;
 }
 
 const MapEvents: React.FC<{
-  setContextMenu: React.Dispatch<React.SetStateAction<ContextMenuState>>;
+    setContextMenu: React.Dispatch<React.SetStateAction<ContextMenuState>>;
 }> = ({ setContextMenu }) => {
     const map = useMapEvents({
         contextmenu (e: { latlng: LatLng; originalEvent: MouseEvent }) {
@@ -56,6 +46,7 @@ const MapEvents: React.FC<{
                 latlng: [e.latlng.lat, e.latlng.lng],
                 isActive: true,
             });
+            localStorage.setItem('geoCord', `${e.latlng.lat}, ${e.latlng.lng}`);
         },
         click () {
             setContextMenu({ coords: [0, 0], latlng: [0, 0], isActive: false });
@@ -65,12 +56,14 @@ const MapEvents: React.FC<{
 };
 
 const MarkerWithZoom: React.FC<{
-  marker: IParty;
-  setActiveMarkerId: React.Dispatch<React.SetStateAction<string | undefined>>;
-  setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
+    marker: IParty;
+    setActiveMarkerId: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ marker, setActiveMarkerId, setShowInfo }) => {
     const map = useMap();
-    if (!marker.geoPoint) return;
+
+    if (!marker.geoPoint) return null;
+
     return (
         <Marker
             position={[marker.geoPoint[0], marker.geoPoint[1]]}
@@ -78,7 +71,6 @@ const MarkerWithZoom: React.FC<{
             eventHandlers={{
                 click: () => {
                     setActiveMarkerId(marker.id);
-                    if (!marker.geoPoint) return;
                     map.setView([marker.geoPoint[0], marker.geoPoint[1]], 16);
                 },
             }}
@@ -90,13 +82,19 @@ const MarkerWithZoom: React.FC<{
                     <div className={cl['balloon-desc']}>{marker.description}</div>
                     <div className={cl['balloon-footer']}>
                         <span>Автор: {marker.author}</span>
-                        <span>Дата: {marker?.createdAt?.toLocaleDateString()}</span>
+                        <span>
+                            Дата: {marker?.createdAt instanceof Date
+                                ? marker.createdAt.toLocaleDateString()
+                                : typeof marker?.createdAt === 'string'
+                                    ? new Date(marker.createdAt).toLocaleDateString()
+                                    : 'Н/Д'}
+                        </span>
                     </div>
                     <button
                         className={cl['balloon-button']}
                         onClick={() => setShowInfo(true)}
                     >
-            Подробнее
+                        Подробнее
                     </button>
                 </div>
             </Popup>
@@ -105,11 +103,12 @@ const MarkerWithZoom: React.FC<{
 };
 
 export const Map: React.FC = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const { allParties, getAllLoading, getAllError } = useSelector((state) => state.marker);
+
     const [activeMarkerId, setActiveMarkerId] = useState<string | undefined>('');
-    // const [newParty, setNewParty] = useState<IParty>({});
-    const [modalCreate, setModalCreate] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const [contextMenu, setContextMenu] = useState<ContextMenuState>({
         coords: [0, 0],
@@ -117,7 +116,15 @@ export const Map: React.FC = () => {
         isActive: false,
     });
 
-    const activeMarkerData = markersData.find((marker) => marker.id === activeMarkerId);
+    const activeMarkerData = allParties?.find((marker: IParty) => marker.id === activeMarkerId);
+
+    useEffect(() => {
+        dispatch(getAllParties());
+    }, [dispatch]);
+
+    if (getAllError) return void navigate('/error');
+
+    if (getAllLoading) return <Spinner />;
 
     return (
         <div className={cl['map__container']}>
@@ -127,14 +134,6 @@ export const Map: React.FC = () => {
                     onClose={() => setShowInfo(false)}
                 />
             )}
-
-            <Modal
-                title="Create party"
-                onClose={() => setModalCreate(false)}
-                isVisible={modalCreate}
-            >
-
-            </Modal>
 
             {contextMenu.isActive && (
                 <div
@@ -151,13 +150,13 @@ export const Map: React.FC = () => {
                         onClick={() => navigate('/add-event')}
                         className={cl['context-menu__item']}
                     >
-            Добавить маркер
+                        Добавить маркер
                     </div>
-                    {markersData.some(
-                        (marker) =>
+                    {allParties?.some(
+                        (marker: IParty) =>
                             marker.geoPoint &&
-              marker.geoPoint[0] === contextMenu.latlng[0] &&
-              marker?.geoPoint[1] === contextMenu.latlng[1],
+                            marker.geoPoint[0] === contextMenu.latlng[0] &&
+                            marker.geoPoint[1] === contextMenu.latlng[1],
                     ) && (
                         <React.Fragment>
                             <div className={cl['context-menu__item']}>Редактировать</div>
@@ -176,14 +175,13 @@ export const Map: React.FC = () => {
                 attributionControl={false}
                 className={cl['map']}
             >
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <MapEvents setContextMenu={setContextMenu} />
-                {markersData.map((marker) => (
+
+                {allParties?.map((party: IParty) => (
                     <MarkerWithZoom
-                        key={marker.id}
-                        marker={marker}
+                        key={party.id || party.uid}
+                        marker={party}
                         setActiveMarkerId={setActiveMarkerId}
                         setShowInfo={setShowInfo}
                     />

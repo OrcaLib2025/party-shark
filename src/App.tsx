@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
+import { Spinner } from 'orcalib-ui-kit';
 import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -49,12 +50,12 @@ function App () {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            setLoading(true);
             if (firebaseUser) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 localStorage.setItem('accessToken', firebaseUser.accessToken);
                 await fetchUserData(firebaseUser.uid);
+                setLoading(true);
             } else {
                 localStorage.removeItem('accessToken');
                 dispatch(clearUser());
@@ -66,7 +67,7 @@ function App () {
     }, [dispatch]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Spinner />;
     }
 
     return (

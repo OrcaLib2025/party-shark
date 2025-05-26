@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Icon } from '../../../components/Icon';
-import { createParty } from '../../../redux/actions/marker';
+import { createParty, resetCreatedParty } from '../../../redux/actions/marker';
 import { useSelector } from '../../../redux/store';
 import { IParty } from '../../../utils/models/MarkerData';
 
@@ -20,6 +20,7 @@ type LocalParty = Omit<IParty, 'createdAt' | 'membersCount'> & {
 export const AddNewEvent: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
     const { createLoading, createError, createdParty } = useSelector((state) => state.marker);
 
     const omskTimeZone = 'Asia/Omsk';
@@ -27,11 +28,13 @@ export const AddNewEvent: React.FC = () => {
     const initialEndDate = new Date();
     const initialStart = new Date();
     const initialEnd = addHours(initialStart, 1);
+    const geo = localStorage.getItem('geoCord')?.split(',').map(Number) || [0, 0];
 
     const [newEvent, setNewEvent] = useState<LocalParty>({
+        uid: user.uid,
         title: '',
         description: '',
-        geoPoint: [0, 0],
+        geoPoint: [geo[0], geo[1]],
         isActive: true,
         endDate: initialEndDate,
         timeSlots: [{ start: initialStart, end: initialEnd }],
@@ -165,6 +168,8 @@ export const AddNewEvent: React.FC = () => {
             });
             setTimeSlotErrors(['']);
             setEndDateError('');
+
+            dispatch(resetCreatedParty());
             navigate('/map');
         }
         if (createError) {

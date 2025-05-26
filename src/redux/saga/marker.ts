@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { IParty } from '../../utils/models/MarkerData';
 import Request from '../../utils/request';
-import { createPartySuccess, createPartyFailure, CREATE_PARTY } from '../actions/marker';
+import { createPartySuccess, createPartyFailure, CREATE_PARTY, getAllPartiesSuccess, getAllPartiesFailure, GET_ALL_PARTIES } from '../actions/marker';
 
 interface CreatePartyResponse {
     success: boolean;
@@ -24,6 +24,20 @@ export function* createPartySaga(action: { type: string; payload: Omit<IParty, '
     }
 }
 
+export function* getAllPartiesSaga(): Generator<any, void, any> {
+    try {
+        const response = yield call(request.get, '/parties/all-parties');
+        if (response.success) {
+            yield put(getAllPartiesSuccess(response.data));
+        } else {
+            yield put(getAllPartiesFailure(response.message || 'Не удалось загрузить список вечеринок'));
+        }
+    } catch (error: any) {
+        yield put(getAllPartiesFailure(error.message || 'Ошибка при получении списка вечеринок'));
+    }
+}
+
 export  function* partySaga() {
     yield takeEvery(CREATE_PARTY, createPartySaga);
+    yield takeEvery(GET_ALL_PARTIES, getAllPartiesSaga);
 }

@@ -2,7 +2,7 @@ import { User } from "../../utils/models/AuthData";
 import { SET_USER, CLEAR_USER } from "../actions/auth";
 
 const initialState = {
-    user: null as User | null
+    user: null as User | null,
 };
 
 export const authReducer = (state = initialState, action: any) => {
