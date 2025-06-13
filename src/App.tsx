@@ -13,6 +13,7 @@ import { Authorization } from './pages/Authorization';
 import { Chat } from './pages/Chat';
 import { Messenger } from './pages/Chat/Messenger';
 import { EventPage } from './pages/Events';
+import { Home } from './pages/Home';
 import { Map } from './pages/Map';
 import { AddNewEvent } from './pages/Map/router/AddNewEvent';
 import { clearUser, setUser } from './redux/actions/auth';
@@ -76,7 +77,7 @@ function App () {
                 <SideMenu />
                 <div className='div1'>
                     <Routes>
-                        <Route path="/" element={<Suspense><div className=''>1</div></Suspense>} />
+                        <Route path="/" element={<Suspense><Home /></Suspense>} />
                         <Route path="/authorization" element={<Suspense><Authorization /></Suspense>} />
                         <Route path="/chat" element={
                             user

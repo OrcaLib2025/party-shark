@@ -13,8 +13,19 @@ import { IParty } from '../../utils/models/MarkerData';
 import 'leaflet/dist/leaflet.css';
 import cl from './Map.module.scss';
 
-const customIcon = new L.Icon({
-    iconUrl: '/icons/marker.svg',
+const customIcon = new L.DivIcon({
+    html: `
+    <div style="
+      width: 40px;
+      height: 56px;
+      background: linear-gradient(90deg,rgb(9, 99, 189) 0%, #66CCFF 100%);
+      mask-image: url('/icons/marker.svg');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      border: 2px solid black;
+    "></div>
+  `,
+    className: '',
     iconSize: [40, 56],
     iconAnchor: [22, 43],
     popupAnchor: [0, -41],

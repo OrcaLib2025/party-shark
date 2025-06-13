@@ -13,24 +13,8 @@ export const SideMenu: React.FC = () => {
 
     const { user } = useSelector((state) => state.auth);
 
-    const handleHomePage = () => {
-        navigation('/');
-    };
-
-    const handleErrorPage = () => {
-        navigation('/bebebesbababa');
-    };
-
-    const handleChatPage = () => {
-        navigation('/chat');
-    };
-
-    const handleMapPage = () => {
-        navigation('/map');
-    };
-
-    const handleAuthorization = () => {
-        navigation('/authorization');
+    const navigateTo = (path: string) => {
+        navigation(path);
     };
 
     return (
@@ -56,16 +40,15 @@ export const SideMenu: React.FC = () => {
                                 type='secondary'
                                 theme='light'
                                 text='Войти'
-                                onClick={handleAuthorization}
+                                onClick={() => navigateTo('/authorization')}
                                 className='login-button'
                             />
                         </div>
                     )}
-                <div className='button' onClick={handleHomePage}>Главная</div>
-                <div className='button' onClick={handleMapPage}>Карта</div>
-                <div className='button' onClick={handleChatPage}>Чаты</div>
-                <div className='button' onClick={handleHomePage}>Мероприятия</div>
-                <div className='button' onClick={handleErrorPage}>Настройки</div>
+                <div className='button' onClick={() => navigateTo('/')}>Главная</div>
+                <div className='button' onClick={() => navigateTo('/map')}>Карта</div>
+                <div className='button' onClick={() => navigateTo('/chat')}>Чаты</div>
+                <div className='button' onClick={() => navigateTo('/error')}>Настройки</div>
             </div>
         </div>
     );
