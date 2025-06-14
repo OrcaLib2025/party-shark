@@ -17,6 +17,8 @@ export const SideMenu: React.FC = () => {
         navigation(path);
     };
 
+    console.log(user);
+
     return (
         <div className='menu-overview'>
             <div className='menu'>

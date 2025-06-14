@@ -9,7 +9,7 @@ export const mockChat: MockChat = {
         {
             ChatMember: {
                 uid: 1,
-                username: 'Алексей Навальный',
+                username: 'Антон Чехов',
                 profilePicture: avatar,
                 isOnline: true,
             },
