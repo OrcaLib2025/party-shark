@@ -73,37 +73,57 @@ export const Login = () => {
     };
 
     return (
-        <div className={cl['container']}>
-            <h1>Register your account</h1>
-            <Input
-                type="email"
-                value={email}
-                onChange={handleChangeEmail}
-                placeholder="Email"
-                theme='light'
-            />
-            <Input
-                type="password"
-                value={password}
-                onChange={handleChangePassword}
-                placeholder="Password"
-                theme='light'
-                min={6}
-            />
-            <Button
-                type="secondary"
-                theme="light"
-                onClick={handleSubmit}
-                disabled={isLoading}
-                text={isLoading ? 'Creating account...' : 'Get Started'}
-            />
-            <Button
-                type="secondary"
-                theme="light"
-                onClick={handleGoogleSignIn}
-                disabled={isLoading}
-                text={'Войти с гугла'}
-            />
+        <div className={cl['login-page']}>
+            <div className={cl['container']}>
+                <div className={cl['header']}>
+                    <h1>Welcome Back</h1>
+                    <p>Please enter your details to sign in</p>
+                </div>
+
+                <div className={cl['form-group']}>
+                    <Input
+                        type="email"
+                        value={email}
+                        onChange={handleChangeEmail}
+                        placeholder="Email Address"
+                        theme="light"
+                        size="default"
+                    />
+
+                    <Input
+                        type="password"
+                        value={password}
+                        onChange={handleChangePassword}
+                        placeholder="Password"
+                        theme="light"
+                        min={6}
+                    />
+                </div>
+
+                <Button
+                    type="primary"
+                    theme="light"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                    text={isLoading ? 'Signing in...' : 'Sign In'}
+                />
+
+                <div className={cl['divider']}>
+                    <span>or</span>
+                </div>
+
+                <Button
+                    type="secondary"
+                    theme="light"
+                    onClick={handleGoogleSignIn}
+                    disabled={isLoading}
+                    text='Continue with Google'
+                />
+
+                <div className={cl['footer']}>
+                    Don&apos;t have an account? <a href="/register">Sign up</a>
+                </div>
+            </div>
         </div>
     );
 };

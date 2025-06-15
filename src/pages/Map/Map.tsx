@@ -133,7 +133,7 @@ export const Map: React.FC = () => {
         dispatch(getAllParties());
     }, [dispatch]);
 
-    if (getAllError) return void navigate('/error');
+    if (getAllError) return void navigate('/');
 
     if (getAllLoading) return <Spinner />;
 
