@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 import { Notification } from './components/Notification';
 import SideMenu from './components/SideMenu';
-import { auth } from './firebase';
+import { auth, db } from './firebase';
 import { Authorization } from './pages/Authorization';
 import { Chat } from './pages/Chat';
 import { Messenger } from './pages/Chat/Messenger';
@@ -28,7 +28,6 @@ function App () {
 
     const fetchUserData = async (uid: string) => {
         try {
-            const db = getFirestore();
             const userDoc = doc(db, 'users', uid);
             const docSnap = await getDoc(userDoc);
 
@@ -39,6 +38,7 @@ function App () {
                     email: userData.email,
                     username: userData.username,
                     blocked: userData.blocked || [],
+                    profilePicture: userData.profilePicture || '',
                 }));
             } else {
                 dispatch(clearUser());

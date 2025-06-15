@@ -28,12 +28,7 @@ export const SideMenu: React.FC = () => {
                 {auth.currentUser
                     ? (
                         <UserProfile
-                            user= { {
-                                username: user.username,
-                                uid: user.uid,
-                                email: user.email,
-                                blocked: user.blocked,
-                            } }
+                            user= { user }
                         />
                     )
                     : (

@@ -1,10 +1,13 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { signOut } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore';
 
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { setUser } from '../../redux/actions/auth';
 import { User } from '../../utils/models/AuthData';
 import upload from '../../utils/upload';
 import { Icon } from '../Icon';
@@ -16,6 +19,7 @@ interface UserProfileProps {
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+    const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [currentProfilePicture, setCurrentProfilePicture] = useState(user.profilePicture);
     const [isUploading, setIsUploading] = useState(false);
@@ -68,6 +72,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
             // Обновляем основное изображение после загрузки
             setCurrentProfilePicture(downloadURL);
+            dispatch(setUser({
+                ...user,
+                profilePicture: downloadURL,
+            }));
+            await updateDoc(doc(db, 'users', user.uid), {
+                profilePicture: downloadURL,
+            });
             toast.success('Аватар успешно обновлен');
         } catch (error) {
             console.error('Error uploading profile picture:', error);
@@ -103,12 +114,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    // useEffect(() => {
-    //     if (currentProfilePicture) {
-    //         dispatch();
-    //     }
-    // });
 
     return (
         <div className="user-profile-container">
