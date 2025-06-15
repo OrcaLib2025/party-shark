@@ -1,5 +1,16 @@
 import { IParty } from "../../utils/models/MarkerData";
-import { CREATE_PARTY, CREATE_PARTY_SUCCESS, CREATE_PARTY_FAILURE, RESET_CREATED_PARTY, GET_ALL_PARTIES, GET_ALL_PARTIES_FAILURE, GET_ALL_PARTIES_SUCCESS } from "../actions/marker";
+import { 
+    CREATE_PARTY,
+    CREATE_PARTY_SUCCESS,
+    CREATE_PARTY_FAILURE,
+    RESET_CREATED_PARTY,
+    GET_ALL_PARTIES,
+    GET_ALL_PARTIES_FAILURE,
+    GET_ALL_PARTIES_SUCCESS,
+    GET_PARTY_BY_ID,
+    GET_PARTY_BY_ID_FAILURE,
+    GET_PARTY_BY_ID_SUCCESS
+} from "../actions/marker";
 
 
 type PartyState = {
@@ -10,6 +21,10 @@ type PartyState = {
     allParties: IParty[];
     getAllLoading: boolean;
     getAllError: string | null;
+
+    currentParty: IParty | null;
+    currentPartyLoading: boolean;
+    currentPartyError: string | null;
 };
 
 const initialState: PartyState = {
@@ -20,6 +35,10 @@ const initialState: PartyState = {
     allParties: [],
     getAllLoading: false,
     getAllError: null,
+
+    currentParty: null,
+    currentPartyLoading: false,
+    currentPartyError: null,
 };
 
 export const partyReducer = (state = initialState, action: any): PartyState => {
@@ -72,6 +91,28 @@ export const partyReducer = (state = initialState, action: any): PartyState => {
                 ...state,
                 getAllLoading: false,
                 getAllError: action.payload,
+            };
+
+        case GET_PARTY_BY_ID:
+            return {
+                ...state,
+                currentPartyLoading: true,
+                currentPartyError: null,
+                currentParty: null,
+            };
+
+        case GET_PARTY_BY_ID_SUCCESS:
+            return {
+                ...state,
+                currentPartyLoading: false,
+                currentParty: action.payload,
+            };
+
+        case GET_PARTY_BY_ID_FAILURE:
+            return {
+                ...state,
+                currentPartyLoading: false,
+                currentPartyError: action.payload,
             };
 
         default:

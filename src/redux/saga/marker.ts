@@ -1,11 +1,27 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { IParty } from '../../utils/models/MarkerData';
 import Request from '../../utils/request';
-import { createPartySuccess, createPartyFailure, CREATE_PARTY, getAllPartiesSuccess, getAllPartiesFailure, GET_ALL_PARTIES } from '../actions/marker';
+import {
+    createPartySuccess,
+    createPartyFailure,
+    CREATE_PARTY,
+    getAllPartiesSuccess,
+    getAllPartiesFailure,
+    GET_ALL_PARTIES,
+    getPartyByIdFailure,
+    getPartyByIdSuccess,
+    GET_PARTY_BY_ID,
+} from '../actions/marker';
 
 interface CreatePartyResponse {
     success: boolean;
     data: IParty;
+    message?: string;
+}
+
+interface GetPartyByIdResponse {
+    success: boolean;
+    data?: IParty;
     message?: string;
 }
 
@@ -37,7 +53,21 @@ export function* getAllPartiesSaga(): Generator<any, void, any> {
     }
 }
 
+export function* getPartyByIdSaga(action: { type: string; payload: string }): Generator<any, void, any> {
+    try {
+        const response: GetPartyByIdResponse = yield call(request.get, `/parties/party-by-id/${action.payload}`);
+        if (response.success && response.data) {
+            yield put(getPartyByIdSuccess(response.data));
+        } else {
+            yield put(getPartyByIdFailure(response.message || 'Вечеринка не найдена'));
+        }
+    } catch (error: any) {
+        yield put(getPartyByIdFailure(error.message || 'Ошибка при получении данных вечеринки'));
+    }
+}
+
 export  function* partySaga() {
     yield takeEvery(CREATE_PARTY, createPartySaga);
     yield takeEvery(GET_ALL_PARTIES, getAllPartiesSaga);
+    yield takeEvery(GET_PARTY_BY_ID, getPartyByIdSaga);
 }

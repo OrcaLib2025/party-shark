@@ -45,7 +45,6 @@ export const EventCard: React.FC<EventProps> = ({ event }) => {
                         onRemove={() => { }}
                     />
                 </div>
-
                 <p className={cl.card__description}>{event.description}</p>
 
                 <div className={cl.card__details}>
