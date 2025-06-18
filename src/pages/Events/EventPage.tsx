@@ -88,7 +88,11 @@ export const EventPage: React.FC = () => {
         <div className={styles.event}>
             <div className={styles.event__header}>
                 <div className={styles.event__imageContainer}>
-                    <img src={currentParty.img} alt={currentParty.title} className={styles.event__image} />
+                    {
+                        currentParty.img
+                            ? <img src={currentParty.img} alt={currentParty.title} className={styles.event__image} />
+                            : <img src='/img/m.webp' alt={currentParty.title} className={styles.event__image} />
+                    }
                     <div className={styles.event__badges}>
                         {currentParty.isPaid && (
                             <span className={`${styles.event__badge} ${styles['event__badge--paid']}`}>

@@ -17,7 +17,7 @@ export const EventCard: React.FC<EventProps> = ({ event }) => {
 
     const membersText = `${event.members?.length || event.membersCount}/${event.maxMembers} участников`;
     const dateText = formatDate(event.timeSlots[0]?.start);
-    const isFull = event.membersCount >= event.maxMembers;
+    const isFull = event.members && event.members?.length >= event.maxMembers;
 
     return (
         <div className={classnames(cl.card)}>
@@ -31,7 +31,7 @@ export const EventCard: React.FC<EventProps> = ({ event }) => {
                         {
                             !event.img
                                 ? (
-                                    <img src='img/Seat.svg' alt={event.title} />
+                                    <img src='img/m.webp' alt={event.title} />
                                 )
                                 : (
                                     <img src={event.img} alt={event.title} />
