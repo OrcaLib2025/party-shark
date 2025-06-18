@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import { Taglist } from 'orcalib-ui-kit';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,25 +15,32 @@ interface EventProps {
 export const EventCard: React.FC<EventProps> = ({ event }) => {
     const navigate = useNavigate();
 
-    const membersText = `${event.membersCount}/${event.maxMembers} участников`;
+    const membersText = `${event.members?.length || event.membersCount}/${event.maxMembers} участников`;
     const dateText = formatDate(event.timeSlots[0]?.start);
     const isFull = event.membersCount >= event.maxMembers;
 
-    console.log(event);
-
     return (
-        <div className={`${cl.card} ${isFull ? cl.card_full : ''}`}>
-            {!event.img
-                ? (
-                    <div className={cl.card__image}>
-                        <img src='img/Seat.svg' alt={event.title} />
-                        {event.isPaid && <span className={cl.card__badge}>Платно</span>}
-                    </div>
-                )
-                : (
-                    <div className={cl.card__image}>
-                        <img src={event.img} alt={event.title} />
-                        {event.isPaid && <span className={cl.card__badge}>Платно</span>}
+        <div className={classnames(cl.card)}>
+            {!event.img &&
+                (
+                    <div
+                        className={classnames(
+                            cl.card__image,
+                        )}
+                    >
+                        {
+                            !event.img
+                                ? (
+                                    <img src='img/Seat.svg' alt={event.title} />
+                                )
+                                : (
+                                    <img src={event.img} alt={event.title} />
+                                )
+                        }
+                        <div className={cl['card__info']}>
+                            {isFull && <span className={cl['card__members-full']}>Заполненно</span>}
+                            {event.isPaid && <span className={cl.card__badge}>Платно</span>}
+                        </div>
                     </div>
                 )}
 
@@ -55,7 +63,6 @@ export const EventCard: React.FC<EventProps> = ({ event }) => {
                     <div className={cl.card__detail}>
                         <span className={cl.card__icon}>👥</span> {/* НАДО ПОТОМ ЗАМЕНИТЬ, ПОКА ТАК! */}
                         {membersText}
-                        {isFull && <span className={cl.card__full}>Заполнено</span>}
                     </div>
                 </div>
 

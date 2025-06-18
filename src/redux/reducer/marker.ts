@@ -1,5 +1,5 @@
 import { IParty } from "../../utils/models/MarkerData";
-import { 
+import {
     CREATE_PARTY,
     CREATE_PARTY_SUCCESS,
     CREATE_PARTY_FAILURE,
@@ -9,9 +9,11 @@ import {
     GET_ALL_PARTIES_SUCCESS,
     GET_PARTY_BY_ID,
     GET_PARTY_BY_ID_FAILURE,
-    GET_PARTY_BY_ID_SUCCESS
+    GET_PARTY_BY_ID_SUCCESS,
+    ADD_MEMBER_TO_PARTY,
+    ADD_MEMBER_TO_PARTY_SUCCESS,
+    ADD_MEMBER_TO_PARTY_FAILURE
 } from "../actions/marker";
-
 
 type PartyState = {
     createLoading: boolean;
@@ -25,6 +27,9 @@ type PartyState = {
     currentParty: IParty | null;
     currentPartyLoading: boolean;
     currentPartyError: string | null;
+
+    addMemberLoading: boolean;
+    addMemberError: string | null;
 };
 
 const initialState: PartyState = {
@@ -39,6 +44,9 @@ const initialState: PartyState = {
     currentParty: null,
     currentPartyLoading: false,
     currentPartyError: null,
+
+    addMemberLoading: false,
+    addMemberError: null,
 };
 
 export const partyReducer = (state = initialState, action: any): PartyState => {
@@ -66,6 +74,7 @@ export const partyReducer = (state = initialState, action: any): PartyState => {
                 createError: action.payload,
                 createdParty: null,
             };
+
         case RESET_CREATED_PARTY:
             return {
                 ...state,
@@ -113,6 +122,30 @@ export const partyReducer = (state = initialState, action: any): PartyState => {
                 ...state,
                 currentPartyLoading: false,
                 currentPartyError: action.payload,
+            };
+
+        case ADD_MEMBER_TO_PARTY:
+            return {
+                ...state,
+                addMemberLoading: true,
+                addMemberError: null,
+            };
+
+        case ADD_MEMBER_TO_PARTY_SUCCESS:
+            return {
+                ...state,
+                addMemberLoading: false,
+                currentParty: action.payload,
+                allParties: state.allParties.map(party =>
+                    party._id === action.payload._id ? action.payload : party
+                ),
+            };
+
+        case ADD_MEMBER_TO_PARTY_FAILURE:
+            return {
+                ...state,
+                addMemberLoading: false,
+                addMemberError: action.payload,
             };
 
         default:

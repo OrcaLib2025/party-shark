@@ -38,7 +38,7 @@ export const SideMarkInfo: React.FC<Marker & SideMarkInfo> = ({
                     {data.author}
                 </span>
                 <button
-                    onClick={() => void navigate(`/event/${data.id}`)}
+                    onClick={() => void navigate(`/event/${data._id}`)}
                 >
                     На страницу вечеринки!
                 </button>

@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
+import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { Spinner } from '../../components/Spinner';
 import { EventCard } from '../../features/EventCard';
 import { getAllParties } from '../../redux/actions/marker';
 import { useSelector } from '../../redux/store';
+import { ErrorPage } from '../Error';
 
 import cl from './Home.module.scss';
 
 export const Home = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const { allParties, getAllLoading, getAllError } = useSelector((state) => state.marker);
 
@@ -19,7 +19,7 @@ export const Home = () => {
         dispatch(getAllParties());
     }, [dispatch]);
 
-    if (getAllError) return navigate('/error');
+    if (getAllError) return <ErrorPage />;
     if (getAllLoading) return <Spinner />;
 
     return (
@@ -28,7 +28,7 @@ export const Home = () => {
                 {allParties.map((item) => (
                     <div
                         key={item._id}
-                        className={cl.home__item}
+                        className={classnames(cl.home__item, cl[''])}
                     >
                         <EventCard event={item}/>
                     </div>

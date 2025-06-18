@@ -9,6 +9,7 @@ import { SideMarkInfo } from '../../components/SideMarkInfo';
 import { getAllParties } from '../../redux/actions/marker';
 import { useSelector } from '../../redux/store';
 import { IParty } from '../../utils/models/MarkerData';
+import { ErrorPage } from '../Error';
 
 import 'leaflet/dist/leaflet.css';
 import cl from './Map.module.scss';
@@ -81,7 +82,7 @@ const MarkerWithZoom: React.FC<{
             icon={customIcon}
             eventHandlers={{
                 click: () => {
-                    setActiveMarkerId(marker.id);
+                    setActiveMarkerId(marker._id);
                     map.setView([marker.geoPoint[0], marker.geoPoint[1]], 16);
                 },
             }}
@@ -127,13 +128,13 @@ export const Map: React.FC = () => {
         isActive: false,
     });
 
-    const activeMarkerData = allParties?.find((marker: IParty) => marker.id === activeMarkerId);
+    const activeMarkerData = allParties?.find((marker: IParty) => marker._id === activeMarkerId);
 
     useEffect(() => {
         dispatch(getAllParties());
     }, [dispatch]);
 
-    if (getAllError) return void navigate('/');
+    if (getAllError) return <ErrorPage />;
 
     if (getAllLoading) return <Spinner />;
 
@@ -191,7 +192,7 @@ export const Map: React.FC = () => {
 
                 {allParties?.map((party: IParty) => (
                     <MarkerWithZoom
-                        key={party.id || party.uid}
+                        key={party._id || party.uid}
                         marker={party}
                         setActiveMarkerId={setActiveMarkerId}
                         setShowInfo={setShowInfo}

@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import classnames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,7 +13,7 @@ import { User } from '../../utils/models/AuthData';
 import upload from '../../utils/upload';
 import { Icon } from '../Icon';
 
-import './UserProfile.scss';
+import cl from './UserProfile.module.scss';
 
 interface UserProfileProps {
     user: User;
@@ -36,8 +37,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             await signOut(auth);
             navigation('/');
             toast.info('Вы вышли из аккаунта');
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-            console.error('Logout failed: ', error);
             toast.error('Ошибка при выходе из аккаунта');
         }
     };
@@ -61,16 +62,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
         setUploadProgress(0);
 
         try {
-            // Создаем временный URL для preview
             const previewUrl = URL.createObjectURL(file);
             setCurrentProfilePicture(previewUrl);
 
-            // Загружаем файл на сервер
             const downloadURL = await upload(file, { type: 'profilePictures' }, (progress) => {
                 setUploadProgress(progress);
             });
 
-            // Обновляем основное изображение после загрузки
             setCurrentProfilePicture(downloadURL);
             dispatch(setUser({
                 ...user,
@@ -83,7 +81,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
         } catch (error) {
             console.error('Error uploading profile picture:', error);
             toast.error('Ошибка при загрузке аватара');
-            // Возвращаем предыдущее изображение при ошибке
             setCurrentProfilePicture(user.profilePicture);
         } finally {
             setIsUploading(false);
@@ -98,7 +95,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     };
 
     const handleSettings = () => {
-        // Реализация настроек
         toast.info('Функция настроек в разработке');
     };
 
@@ -116,7 +112,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     }, []);
 
     return (
-        <div className="user-profile-container">
+        <div className={cl['user-profile-container']}>
             <input
                 type="file"
                 ref={fileInputRef}
@@ -125,9 +121,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                 style={{ display: 'none' }}
             />
 
-            <div className="profile-content">
+            <div className={cl['profile-content']}>
                 <div
-                    className={`avatar ${isUploading ? 'uploading' : ''}`}
+                    className={classnames(cl['avatar'], {
+                        [cl['uploading']]: isUploading,
+                    })}
                     onClick={handleAvatarClick}
                 >
                     {currentProfilePicture
@@ -139,9 +137,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                                     title="Нажмите для смены аватара"
                                 />
                                 {isUploading && (
-                                    <div className="upload-progress">
+                                    <div className={cl['upload-progress']}>
                                         <div
-                                            className="progress-bar"
+                                            className={cl['progress-bar']}
                                             style={{ width: `${uploadProgress}%` }}
                                         />
                                         <span>{uploadProgress}%</span>
@@ -150,29 +148,29 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                             </>
                         )
                         : (
-                            <div className="default-avatar" title="Нажмите для смены аватара">
+                            <div className={cl['default-avatar']} title="Нажмите для смены аватара">
                                 {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
                             </div>
                         )}
                 </div>
-                <div className="user-info">
-                    <span className="user-name">{user.username || 'User'}</span>
-                    {user.email && <span className="user-email">{user.email}</span>}
+                <div className={cl['user-info']}>
+                    <span className={cl['user-name']}>{user.username || 'User'}</span>
+                    {user.email && <span className={cl['user-email']}>{user.email}</span>}
                 </div>
             </div>
-            <div className="menu-icon-container" ref={menuRef}>
+            <div className={cl['menu-icon-container']} ref={menuRef}>
                 <Icon
                     icon="dots"
                     size="md"
                     onClick={toggleMenu}
-                    className="menu-icon"
+                    className={cl['menu-icon']}
                     disabled={isUploading}
                 />
 
                 {isMenuOpen && (
-                    <div className="dropdown-menu">
+                    <div className={cl['dropdown-menu']}>
                         <div
-                            className="menu-item"
+                            className={cl['menu-item']}
                             onClick={() => {
                                 handleSettings();
                                 setIsMenuOpen(false);
@@ -181,7 +179,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                             Настройки
                         </div>
                         <div
-                            className="menu-item"
+                            className={cl['menu-item']}
                             onClick={() => {
                                 handleLogOutUser();
                                 setIsMenuOpen(false);

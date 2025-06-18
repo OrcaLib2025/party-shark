@@ -12,6 +12,7 @@ import { auth, db } from './firebase';
 import { Authorization } from './pages/Authorization';
 import { Chat } from './pages/Chat';
 import { Messenger } from './pages/Chat/Messenger';
+import { ErrorPage } from './pages/Error';
 import { EventPage } from './pages/Events';
 import { Home } from './pages/Home';
 import { Map } from './pages/Map';
@@ -78,6 +79,7 @@ function App () {
                 <div className='div1'>
                     <Routes>
                         <Route path="/" element={<Suspense><Home /></Suspense>} />
+                        <Route path="/*" element={<Suspense><ErrorPage /></Suspense>} />
                         <Route path="/authorization" element={<Suspense><Authorization /></Suspense>} />
                         <Route path="/chat" element={
                             user

@@ -13,6 +13,9 @@ export const GET_PARTY_BY_ID = 'GET_PARTY_BY_ID';
 export const GET_PARTY_BY_ID_SUCCESS = 'GET_PARTY_BY_ID_SUCCESS';
 export const GET_PARTY_BY_ID_FAILURE = 'GET_PARTY_BY_ID_FAILURE';
 
+export const ADD_MEMBER_TO_PARTY = 'ADD_MEMBER_TO_PARTY';
+export const ADD_MEMBER_TO_PARTY_SUCCESS = 'ADD_MEMBER_TO_PARTY_SUCCESS';
+export const ADD_MEMBER_TO_PARTY_FAILURE = 'ADD_MEMBER_TO_PARTY_FAILURE';
 
 export const createParty = (partyData: Omit<IParty, 'createdAt' | 'membersCount'>) => ({
   type: CREATE_PARTY,
@@ -60,4 +63,19 @@ export const getPartyByIdSuccess = (party: IParty | null) => ({
 export const getPartyByIdFailure = (error: string) => ({
   type: GET_PARTY_BY_ID_FAILURE,
   payload: error,
+});
+
+export const addMemberToParty = (partyId: string, member: { name: string; id: string }) => ({
+  type: ADD_MEMBER_TO_PARTY,
+  payload: { partyId, member }
+});
+
+export const addMemberToPartySuccess = (party: IParty) => ({
+  type: ADD_MEMBER_TO_PARTY_SUCCESS,
+  payload: party
+});
+
+export const addMemberToPartyFailure = (error: string) => ({
+  type: ADD_MEMBER_TO_PARTY_FAILURE,
+  payload: error
 });

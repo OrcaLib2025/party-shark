@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from 'orcalib-ui-kit';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getPartyById } from '../../redux/actions/marker';
+import { addMemberToParty, getPartyById } from '../../redux/actions/marker';
 import { useSelector } from '../../redux/store';
 
 import styles from './EventPage.module.scss';
@@ -12,10 +11,17 @@ import styles from './EventPage.module.scss';
 export const EventPage: React.FC = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
+    const [isJoining, setIsJoining] = useState(false);
 
-    const { currentParty, currentPartyLoading, currentPartyError } = useSelector(
-        (state) => state.marker,
-    );
+    const { user } = useSelector((state) => state.auth);
+
+    const {
+        currentParty,
+        currentPartyLoading,
+        currentPartyError,
+        addMemberLoading,
+        addMemberError,
+    } = useSelector((state) => state.marker);
 
     useEffect(() => {
         if (id) {
@@ -23,8 +29,12 @@ export const EventPage: React.FC = () => {
         }
     }, [dispatch, id]);
 
-    const formatDate = (date: Date): string => {
-        return new Date(date).toLocaleString('ru-RU', {
+    const formatDate = (date: Date | string): string => {
+        const dateObj = date instanceof Date ? date : new Date(date);
+        if (isNaN(dateObj.getTime())) {
+            return 'Некорректная дата';
+        }
+        return dateObj.toLocaleString('ru-RU', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
@@ -45,6 +55,26 @@ export const EventPage: React.FC = () => {
         const endDate = new Date(end);
         return Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
     };
+
+    const handleJoinParty = async () => {
+        if (!id || !currentParty) return;
+
+        setIsJoining(true);
+        const currentUser = {
+            name: user.username,
+            id: user.uid,
+        };
+
+        await dispatch(addMemberToParty(id, currentUser));
+        dispatch(getPartyById(id));
+        setIsJoining(false);
+    };
+
+    const isAlreadyMember = currentParty?.members?.some(member =>
+        member.id === 'user-id',
+    );
+
+    const isPartyFull = currentParty && currentParty?.membersCount >= currentParty?.maxMembers;
 
     if (currentPartyError) {
         return <h1>Ошибка загрузки мероприятия</h1>;
@@ -104,7 +134,6 @@ export const EventPage: React.FC = () => {
                 <div className={styles.event__section}>
                     <h2 className={styles.event__sectionTitle}>Теги</h2>
                     <div className={styles.event__tags}>
-                        {/* @ts-ignore */}
                         {currentParty.tags.map((tag, index) => (
                             <span key={index} className={styles.event__tag}>
                                 #{tag}
@@ -116,12 +145,10 @@ export const EventPage: React.FC = () => {
                 <div className={styles.event__section}>
                     <h2 className={styles.event__sectionTitle}>Временные слоты</h2>
                     <div className={styles.event__slots}>
-                        {/* @ts-ignore */}
                         {currentParty.timeSlots.map((slot, index) => (
                             <div key={index} className={styles.event__slot}>
                                 <span className={styles.event__slotTime}>
-                                    {/* @ts-ignore */}
-                                    {formatTime(slot.start)} — {formatTime(slot.end)}
+                                    {formatTime(new Date(slot.start))} — {formatTime(new Date(slot.end))}
                                 </span>
                                 <span className={styles.event__slotDuration}>
                                     {calculateDurationHours(slot.start, slot.end)} ч
@@ -135,11 +162,10 @@ export const EventPage: React.FC = () => {
                     <h2 className={styles.event__sectionTitle}>Участники</h2>
                     <div className={styles.event__members}>
                         {Array.isArray(currentParty.members) &&
-                            // @ts-ignore
                             currentParty.members.map((member, index) => (
                                 <div key={index} className={styles.event__member}>
                                     <span className={styles.event__memberIcon}>👤</span>
-                                    <span>{member}</span>
+                                    <span>{member.name}</span>
                                 </div>
                             ))}
                     </div>
@@ -147,10 +173,21 @@ export const EventPage: React.FC = () => {
             </div>
 
             <div className={styles.event__actions}>
-                <button className={`${styles.event__button} ${styles['event__button--primary']}`}>
-                    Присоединиться
+                <button
+                    className={`${styles.event__button} ${styles['event__button--primary']}`}
+                    onClick={handleJoinParty}
+                >
+                    {isJoining || addMemberLoading
+                        ? 'Загрузка...'
+                        : isAlreadyMember
+                            ? 'Вы уже участвуете'
+                            : isPartyFull ? 'Мест нет' : 'Присоединиться'}
                 </button>
                 <button className={styles.event__button}>Показать на карте</button>
+
+                {addMemberError && (
+                    <div className={styles.event__error}>{addMemberError}</div>
+                )}
             </div>
         </div>
     );

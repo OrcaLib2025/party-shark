@@ -17,8 +17,6 @@ export const SideMenu: React.FC = () => {
         navigation(path);
     };
 
-    console.log(user);
-
     return (
         <div className='menu-overview'>
             <div className='menu'>
@@ -45,7 +43,7 @@ export const SideMenu: React.FC = () => {
                 <div className='button' onClick={() => navigateTo('/')}>Главная</div>
                 <div className='button' onClick={() => navigateTo('/map')}>Карта</div>
                 <div className='button' onClick={() => navigateTo('/chat')}>Чаты</div>
-                <div className='button' onClick={() => navigateTo('/error')}>Настройки</div>
+                <div className='button' onClick={() => navigateTo('/settings')}>Настройки</div>
             </div>
         </div>
     );

@@ -4,7 +4,7 @@ export interface IParty {
   img?: string;
   title: string;
   description?: string;
-  members?: string[];
+  members?: { name: string; id: string }[];
   geoPoint: number[];
   isActive: boolean;
   createdAt: Date;

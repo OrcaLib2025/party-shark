@@ -11,6 +11,9 @@ import {
     getPartyByIdFailure,
     getPartyByIdSuccess,
     GET_PARTY_BY_ID,
+    addMemberToPartySuccess,
+    addMemberToPartyFailure,
+    ADD_MEMBER_TO_PARTY,
 } from '../actions/marker';
 
 interface CreatePartyResponse {
@@ -22,6 +25,12 @@ interface CreatePartyResponse {
 interface GetPartyByIdResponse {
     success: boolean;
     data?: IParty;
+    message?: string;
+}
+
+interface AddMemberResponse {
+    success: boolean;
+    data: IParty;
     message?: string;
 }
 
@@ -66,8 +75,31 @@ export function* getPartyByIdSaga(action: { type: string; payload: string }): Ge
     }
 }
 
-export  function* partySaga() {
+export function* addMemberToPartySaga(action: {
+    type: string;
+    payload: { partyId: string; member: { name: string; id: string } }
+}): Generator<any, void, any> {
+    try {
+        const { partyId, member } = action.payload;
+        const response: AddMemberResponse = yield call(
+            request.post,
+            `/parties/${partyId}/members`,
+            member
+        );
+
+        if (response.success) {
+            yield put(addMemberToPartySuccess(response.data));
+        } else {
+            yield put(addMemberToPartyFailure(response.message || 'Ошибка при добавлении участника'));
+        }
+    } catch (error: any) {
+        yield put(addMemberToPartyFailure(error.message || 'Ошибка при добавлении участника'));
+    }
+}
+
+export function* partySaga() {
     yield takeEvery(CREATE_PARTY, createPartySaga);
     yield takeEvery(GET_ALL_PARTIES, getAllPartiesSaga);
     yield takeEvery(GET_PARTY_BY_ID, getPartyByIdSaga);
+    yield takeEvery(ADD_MEMBER_TO_PARTY, addMemberToPartySaga);
 }
