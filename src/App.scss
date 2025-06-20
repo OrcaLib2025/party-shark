@@ -23,10 +23,13 @@
 }
 
 .div1 {
+    position: relative;
     grid-area: pages;
     border-color: colors.$orange;
     border-width: 2px;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
+    overflow: visible;
+    z-index: 1;
 }

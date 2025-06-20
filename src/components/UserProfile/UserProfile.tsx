@@ -17,9 +17,10 @@ import cl from './UserProfile.module.scss';
 
 interface UserProfileProps {
     user: User;
+    onClick: () => void;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+export const UserProfile: React.FC<UserProfileProps> = ({ user, onClick }) => {
     const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [currentProfilePicture, setCurrentProfilePicture] = useState(user.profilePicture);
@@ -29,8 +30,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const navigation = useNavigate();
-
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     const handleLogOutUser = async () => {
         try {
@@ -94,10 +93,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
         }
     };
 
-    const handleSettings = () => {
-        toast.info('Функция настроек в разработке');
-    };
-
     const handleClickOutside = (event: MouseEvent) => {
         if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
             setIsMenuOpen(false);
@@ -112,7 +107,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     }, []);
 
     return (
-        <div className={cl['user-profile-container']}>
+        <div className={cl['user-profile-container']} onClick={onClick}>
             <input
                 type="file"
                 ref={fileInputRef}
@@ -158,21 +153,28 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                     {user.email && <span className={cl['user-email']}>{user.email}</span>}
                 </div>
             </div>
-            <div className={cl['menu-icon-container']} ref={menuRef}>
+            <div
+                className={cl['menu-icon-container']}
+                ref={menuRef}
+                onMouseEnter={() => setIsMenuOpen(true)}
+                onMouseLeave={() => setIsMenuOpen(false)}
+            >
                 <Icon
                     icon="dots"
                     size="md"
-                    onClick={toggleMenu}
                     className={cl['menu-icon']}
                     disabled={isUploading}
                 />
 
                 {isMenuOpen && (
-                    <div className={cl['dropdown-menu']}>
+                    <div
+                        className={cl['dropdown-menu']}
+                        onMouseEnter={() => setIsMenuOpen(true)}
+                        onMouseLeave={() => setIsMenuOpen(false)}
+                    >
                         <div
                             className={cl['menu-item']}
                             onClick={() => {
-                                handleSettings();
                                 setIsMenuOpen(false);
                             }}
                         >

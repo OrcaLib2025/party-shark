@@ -1,8 +1,6 @@
 @use '../../styles/variables/colors';
 
 .card {
-    $self: &;
-
     background: #fff;
     border-radius: 16px;
     overflow: hidden;
@@ -29,7 +27,7 @@
     &_full {
         opacity: 0.9;
 
-        #{$self}__button {
+        &__button {
             cursor: not-allowed;
         }
     }

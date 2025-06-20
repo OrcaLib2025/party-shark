@@ -17,6 +17,7 @@ export const Input: React.FC<InputProps> = ({
     size = 'default',
     theme,
     classNames,
+    disabled,
 }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
@@ -40,6 +41,7 @@ export const Input: React.FC<InputProps> = ({
                     value={value}
                     onChange={handleChange}
                     onFocus={onFocus}
+                    disabled={disabled}
                 />
             </div>
         </div>
