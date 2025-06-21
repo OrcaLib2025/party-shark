@@ -20,22 +20,22 @@ export const ChatItem: React.FC<ChatItemProps> = ({ chatItem, isActive = false, 
                     className={styles.profileImg}
                     src={chatItem.profilePicture}
                     alt='картинка' />
-                {chatItem.isOnline && !chatItem.isGroup && (
+                {chatItem.isOnline && chatItem.type !== 'group' && (
                     <span className={styles.onlineIndicator}></span>
                 )}
             </div>
             <div className={styles.texts}>
                 <div className={styles.senderRow}>
                     <span className={styles.sender}>{chatItem.sender}</span>
-                    {chatItem.messageTime && (
+                    {chatItem.lastMessage?.timestamp && (
                         <span className={styles.time}>
-                            {formatTime(chatItem.messageTime)}
+                            {formatTime(chatItem.lastMessage.timestamp)}
                         </span>
                     )}
                 </div>
                 <div className={styles.lastMessageRow}>
                     <p className={styles.lastMessage}>
-                        {chatItem.lastMessage}
+                        {chatItem.lastMessage?.text}
                     </p>
                     {chatItem.unreadCount
                         ? (

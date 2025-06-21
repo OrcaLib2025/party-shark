@@ -1,0 +1,133 @@
+@use '/src/styles/variables/colors';
+.searchContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  padding-top: 5%;
+}
+.popup {
+  background: colors.$background-primary;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+.searchHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    
+    h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+}
+
+.closeButton {
+    color: colors.$text-primary;
+    border: none;
+    font-size: 1rem;
+    margin-right: 15px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.usersList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.userItem {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: #f5f5f5;
+    }
+}
+.userItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+
+}
+
+.userInfoContainer {
+    display: flex;
+    align-items: center;
+}
+
+.messageButton {
+    min-width: auto;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    height: 32px;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.defaultAvatar {
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.email {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.loading, .noResults {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

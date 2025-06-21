@@ -23,7 +23,7 @@ interface UserProfileProps {
 export const UserProfile: React.FC<UserProfileProps> = ({ user, onClick }) => {
     const dispatch = useDispatch();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [currentProfilePicture, setCurrentProfilePicture] = useState(user.profilePicture);
+    const [currentProfilePicture, setCurrentProfilePicture] = useState<string | undefined>(user.profilePicture || '');
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
 

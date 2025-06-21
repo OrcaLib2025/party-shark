@@ -6,10 +6,6 @@ export const Chat = () => {
     return (
         <div className={styles.container}>
             <ChatList />
-
-            {/* <ChatHeader />
-            <MessageList />
-            <MessageInput /> */}
         </div>
     );
 };

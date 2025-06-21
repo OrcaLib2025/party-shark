@@ -1,135 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Timestamp } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
-import avatarImage from '../../../public/img/avatar.png';
-import avatarGroupImage from '../../../public/img/group-avatar.png';
 import { ChatItem } from '../../components/ChatItem';
 import { Icon } from '../../components/Icon';
 import { Input } from '../../components/Input';
+import { SearchUser } from '../../components/SearchUser';
+import { db } from '../../firebase';
+import { useSelector } from '../../redux/store';
 import { IChatItem } from '../../utils/models/Chat';
 
 import styles from './ChatList.module.scss';
 
-const mockChats: IChatItem[] = [
-    {
-        chatId: 1,
-        sender: 'Команда PartyShark',
-        lastMessage: 'Готовим новый функционал!',
-        isGroup: true,
-        unreadCount: 5,
-        type: 'event',
-        profilePicture: avatarGroupImage,
-        messageTime: new Timestamp(1710000000, 0),
-        isOnline: false,
-    },
-    {
-        chatId: 2,
-        sender: 'Алексей (Яхт-клуб)',
-        lastMessage: 'Завтра выходим в море в 9:00',
-        isGroup: false,
-        unreadCount: 0,
-        type: 'private',
-        profilePicture: avatarImage,
-        messageTime: new Timestamp(1709990000, 0),
-        isOnline: true,
-    },
-    {
-        chatId: 3,
-        sender: "Морской клуб 'Волна'",
-        lastMessage: 'Регистрация на регату открыта!',
-        isGroup: true,
-        unreadCount: 12,
-        type: 'event',
-        profilePicture: avatarGroupImage,
-        messageTime: new Timestamp(1709900000, 0),
-        isOnline: false,
-    },
-    {
-        chatId: 4,
-        sender: 'Марина',
-        lastMessage: 'Привет! Как твои дела?',
-        isGroup: false,
-        unreadCount: 2,
-        type: 'private',
-        profilePicture: avatarImage,
-        messageTime: new Timestamp(1709890000, 0),
-        isOnline: true,
-    },
-    {
-        chatId: 5,
-        sender: 'Рыбацкий чат',
-        lastMessage: 'Кто едет на рыбалку в субботу?',
-        isGroup: true,
-        unreadCount: 0,
-        type: 'group',
-        profilePicture: avatarGroupImage,
-        messageTime: new Timestamp(1709800000, 0),
-        isOnline: false,
-    },
-    {
-        chatId: 6,
-        sender: 'Иван Петров',
-        lastMessage: 'Отправил тебе документы',
-        isGroup: false,
-        unreadCount: 1,
-        type: 'private',
-        profilePicture: avatarImage,
-        messageTime: new Timestamp(1709750000, 0),
-        isOnline: false,
-    },
-    {
-        chatId: 7,
-        sender: "Фестиваль 'Море Ярко'",
-        lastMessage: 'Программа фестиваля обновлена',
-        isGroup: true,
-        unreadCount: 7,
-        type: 'event',
-        profilePicture: avatarGroupImage,
-        messageTime: new Timestamp(1709700000, 0),
-        isOnline: false,
-    },
-    {
-        chatId: 8,
-        sender: "Ольга (Бар 'Шторм')",
-        lastMessage: 'Ждем вас на нашем новом мероприятии!',
-        isGroup: false,
-        unreadCount: 0,
-        type: 'private',
-        profilePicture: avatarImage,
-        messageTime: new Timestamp(1709650000, 0),
-        isOnline: true,
-    },
-    {
-        chatId: 9,
-        sender: 'Чат дайверов',
-        lastMessage: 'Новые места для дайвинга в этом сезоне',
-        isGroup: true,
-        unreadCount: 3,
-        type: 'group',
-        profilePicture: avatarGroupImage,
-        messageTime: new Timestamp(1709600000, 0),
-        isOnline: false,
-    },
-    {
-        chatId: 10,
-        sender: 'Сергей (Инструктор)',
-        lastMessage: 'Завтра в 10:00 тренировка',
-        isGroup: false,
-        unreadCount: 0,
-        type: 'private',
-        profilePicture: avatarImage,
-        messageTime: new Timestamp(1709550000, 0),
-        isOnline: false,
-    },
-];
-
 export const ChatList = () => {
+    const { user } = useSelector((state) => state.auth);
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
-    const [activeChatId] = useState<number | null>(null);
+    const [activeChatId] = useState<string | null>(null);
     const [filter, setFilter] = useState<'all' | 'private' | 'groups' | 'events'>('all');
+    const [chats, setChats] = useState<IChatItem[]>([]);
+    const [showSearchUser, setShowSearchUser] = useState(false);
 
     const handleSearchValue = (value: string) => {
         setSearchValue(value);
@@ -139,26 +30,83 @@ export const ChatList = () => {
         navigate('/messenger');
     };
 
-    const filteredChats = mockChats.filter(chat => {
-        const matchesSearch = chat.sender.toLowerCase().includes(searchValue.toLowerCase());
+    const handleShowSearchUser = () => {
+        setShowSearchUser(true);
+    };
+
+    const filteredChats = chats?.filter(chat => {
+        const senderName = chat.sender || '';
+        const matchesSearch = senderName.toLowerCase().includes(searchValue.toLowerCase());
         const matchesFilter =
             filter === 'all' ||
             (filter === 'private' && chat.type === 'private') ||
-            (filter === 'groups' && chat.isGroup) ||
+            (filter === 'groups' && chat.type === 'group') ||
             (filter === 'events' && chat.type === 'event');
         return matchesSearch && matchesFilter;
     });
 
+    useEffect(() => {
+        if (!user?.uid) return;
+
+        const unSub = onSnapshot(doc(db, 'userchats', user.uid), async (docSnap) => {
+            try {
+                const items = docSnap.data()?.chats || [];
+
+                const promises = items.map(async (item: IChatItem) => {
+                    // Для приватных чатов получаем данные собеседника
+                    if (item.type === 'private') {
+                        // Получаем ID собеседника из chatId (формат "uid1_uid2")
+                        const participants = item.chatId.split('_');
+                        const partnerId = participants.find(id => id !== user.uid);
+
+                        if (partnerId) {
+                            const userDoc = await getDoc(doc(db, 'users', partnerId));
+                            return {
+                                ...item,
+                                sender: userDoc.data()?.username || 'Unknown',
+                                profilePicture: userDoc.data()?.profilePicture,
+                            };
+                        }
+                    }
+                    return item;
+                });
+
+                const chatData = await Promise.all(promises);
+                setChats(chatData.sort((a, b) =>
+                    (b.lastMessage?.timestamp?.toMillis() || 0) -
+                    (a.lastMessage?.timestamp?.toMillis() || 0),
+                ));
+            } catch (error) {
+                console.error('Error loading chats:', error);
+            }
+        });
+
+        return () => unSub();
+    }, [user?.uid]);
+
     return (
         <div className={styles.container}>
+            {showSearchUser && (
+                <SearchUser onClose={() => setShowSearchUser(false)}/>
+            )}
             <div className={styles.chatArea}>
                 <div className={styles.searchContainer}>
+                    <Icon
+                        icon= 'search'
+                        size='md'
+                        onClick={() => {}}
+                    />
                     <Input
                         type="text"
                         placeholder="Поиск чатов..."
                         value={searchValue}
                         onChange={handleSearchValue}
                         theme="light"
+                    />
+                    <Icon
+                        icon= 'plus'
+                        size='md'
+                        onClick={handleShowSearchUser}
                     />
                 </div>
 
@@ -177,14 +125,23 @@ export const ChatList = () => {
                 </div>
 
                 <div className={styles.chats}>
-                    {filteredChats.map((chat) => (
-                        <ChatItem
-                            key={chat.chatId}
-                            chatItem={chat}
-                            isActive={activeChatId === chat.chatId}
-                            onClick={handleMessenger}
-                        />
-                    ))}
+                    {filteredChats
+                        ? (
+                            filteredChats.map((chat) => (
+                                <ChatItem
+                                    key={chat.chatId}
+                                    chatItem={chat}
+                                    isActive={activeChatId === chat.chatId}
+                                    onClick={handleMessenger}
+                                />
+                            ))
+                        )
+                        : (
+                            <div className={styles.noChats}>
+                                <p>Чатов пока нет</p>
+                                {/* Можно добавить кнопку для создания первого чата */}
+                            </div>
+                        )}
                 </div>
             </div>
 
