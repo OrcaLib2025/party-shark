@@ -1,14 +1,24 @@
 import { Timestamp } from 'firebase/firestore';
 
+export interface LastMessage {
+  text: string;
+  senderId: string;
+  timestamp: Timestamp;
+}
+export interface UserChatData {
+  chats: Array<{
+    chatId: string;
+    unreadCount: number;
+    lastReadTimestamp?: Timestamp | null;
+  }>;
+}
+
 export interface IChatItem {
-    chatId: number;
-    uid?: number;
+    chatId: string;
     sender: string;
-    lastMessage?: string;
-    messageTime?: Timestamp;
+    lastMessage?: LastMessage;
     isOnline?: boolean;
     unreadCount?: number;
-    isGroup?: boolean;
     profilePicture?: string;
     type: 'private' | 'group' | 'event' | 'all';
 }
@@ -20,7 +30,7 @@ export interface ChatMember {
     profilePicture?: string;
 }
 
-export interface MockChat {
+export interface Chat {
     title: string;
     onlineStatus: boolean;
     isGroupChat: boolean;
