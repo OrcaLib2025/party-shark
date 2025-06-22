@@ -2,6 +2,7 @@ import AddImageIcon from '../assets/icons/add-image.svg';
 import AddListIcon from '../assets/icons/add-list.svg';
 import AddPhotoIcon from '../assets/icons/add-photo.svg';
 import AddUserIcon from '../assets/icons/add-user.svg';
+import AllChats from '../assets/icons/all-chats.svg';
 import ArrowChevronDownIcon from '../assets/icons/arrow-chevron-down.svg';
 import ArrowChevronLeftIcon from '../assets/icons/arrow-chevron-left.svg';
 import ArrowChevronRightIcon from '../assets/icons/arrow-chevron-right.svg';
@@ -30,6 +31,8 @@ import EyeClosedFilledIcon from '../assets/icons/eye-closed-filled.svg';
 import EyeClosedIcon from '../assets/icons/eye-closed.svg';
 import EyeOpenFilledIcon from '../assets/icons/eye-open-filled.svg';
 import EyeOpenIcon from '../assets/icons/eye-open.svg';
+import Emoji from '../assets/icons/emoji.svg';
+import Event from '../assets/icons/event.svg';
 import FoodBreadIcon from '../assets/icons/food-bread-svgrepo-com.svg';
 import FoodCheeseIcon from '../assets/icons/food-cheese-svgrepo-com.svg';
 import FoodDinnerForkSpoonKnifeIcon from '../assets/icons/food-dinner-fork-spoon-knife-svgrepo-com.svg';
@@ -45,6 +48,7 @@ import FoodPizzaSliceIcon from '../assets/icons/food-pizza-slice-svgrepo-com.svg
 import FoodTacoIcon from '../assets/icons/food-taco-svgrepo-com.svg';
 import FoodWineAndGlassIcon from '../assets/icons/food-wine-and-glass.svg';
 import FoodIcon from '../assets/icons/food.svg';
+import GroupChats from '../assets/icons/group-chats.svg';
 import HistoryIcon from '../assets/icons/history.svg';
 import HomeIcon from '../assets/icons/home.svg';
 import ImageIcon from '../assets/icons/image.svg';
@@ -89,6 +93,7 @@ export const iconMap = {
     'add-list': AddListIcon,
     'add-photo': AddPhotoIcon,
     'add-user': AddUserIcon,
+    'all-chats': AllChats,
     'arrow-chevron-down': ArrowChevronDownIcon,
     'arrow-chevron-left': ArrowChevronLeftIcon,
     'arrow-chevron-right': ArrowChevronRightIcon,
@@ -117,6 +122,8 @@ export const iconMap = {
     'eye-closed': EyeClosedIcon,
     'eye-open-filled': EyeOpenFilledIcon,
     'eye-open': EyeOpenIcon,
+    'emoji': Emoji,
+    'event': Event,
     'food-bread-svgrepo-com': FoodBreadIcon,
     'food-cheese-svgrepo-com': FoodCheeseIcon,
     'food-dinner-fork-spoon-knife-svgrepo-com': FoodDinnerForkSpoonKnifeIcon,
@@ -131,6 +138,7 @@ export const iconMap = {
     'food-pizza-slice-svgrepo-com': FoodPizzaSliceIcon,
     'food-taco-svgrepo-com': FoodTacoIcon,
     'food-wine-and-glass': FoodWineAndGlassIcon,
+    'group-chats': GroupChats,
     food: FoodIcon,
     history: HistoryIcon,
     home: HomeIcon,

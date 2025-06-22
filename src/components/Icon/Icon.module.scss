@@ -28,6 +28,18 @@
         pointer-events: none;
     }
 }
+.icon-add-image {
+    mask-image: url('../../../public/icons/emoji.svg');
+}
+.icon-add-image {
+    mask-image: url('../../../public/icons/event.svg');
+}
+.icon-add-image {   
+    mask-image: url('../../../public/icons/group-chats.svg');
+}
+.icon-add-image {
+    mask-image: url('../../../public/icons/all-chats.svg');
+}
 
 .icon-add-image {
     mask-image: url('../../../public/icons/add-image.svg');

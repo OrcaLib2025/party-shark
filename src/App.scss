@@ -23,6 +23,10 @@
 }
 
 .div1 {
+    background-image: url('/img/error.jpg'); // Потом заменить!!!
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;  
     position: relative;
     grid-area: pages;
     border-color: colors.$orange;

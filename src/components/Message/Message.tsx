@@ -22,8 +22,8 @@ export const Message: React.FC<IMessageProps> = ({ message }) => {
     return (
         <>
             <div className={`${styles.message} ${message.isCurrentUser ? styles['message--current-user'] : styles['message--not-current-user']}`}>
-                {!message.isCurrentUser && (
-                    <div className={styles['message__sender']}>{message.sender}</div>
+                {message.isCurrentUser && (
+                    <div className={styles['message__sender']}>Вы</div>
                 )}
                 <div className={`${styles['message__content']} ${message.isCurrentUser ? styles['message__content--current-user'] : styles['message__content--not-current-user']}`}>
                     {message.image && (
