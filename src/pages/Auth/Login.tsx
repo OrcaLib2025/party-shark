@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
-    GoogleAuthProvider,
     signInWithEmailAndPassword,
     signInWithPopup,
 } from 'firebase/auth';
@@ -18,7 +16,6 @@ import { auth, db, provider } from '../../firebase';
 import cl from './Auth.module.scss';
 
 export const Login = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -60,10 +57,7 @@ export const Login = () => {
     };
     const handleGoogleSignIn = async () => {
         signInWithPopup(auth, provider)
-            .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential?.accessToken;
-                const user = result.user;
+            .then(() => {
                 navigate('/');
                 toast.success('Успешно!');
             }).catch((error) => {
@@ -74,7 +68,7 @@ export const Login = () => {
 
     return (
         <div className={cl['container']}>
-            <h1>Login your account</h1>
+            <h1>Log in your account</h1>
             <Input
                 type="email"
                 value={email}
