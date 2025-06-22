@@ -34,7 +34,7 @@ interface AddMemberResponse {
     message?: string;
 }
 
-const request = new Request('http://localhost:3003/api');
+const request = new Request('/api');
 
 export function* createPartySaga(action: { type: string; payload: Omit<IParty, 'createdAt' | 'membersCount'> }): Generator<any, void, any> {
     try {
