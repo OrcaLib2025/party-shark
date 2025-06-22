@@ -9,6 +9,7 @@ import { MessageList } from '../../components/MessageList';
 import { db } from '../../firebase';
 import { useSelector } from '../../redux/store';
 import { Chat } from '../../utils/models/Chat';
+import { useGetUserById } from '../../utils/useGetUserById';
 
 import styles from './Chat.module.scss';
 
@@ -17,6 +18,7 @@ export const Messenger = () => {
     const { chatId } = useParams<{ chatId: string }>();
     const [chat, setChat] = useState<Chat | null>(null);
 
+    // 1. Подписка на чат
     useEffect(() => {
         if (!chatId) return;
 
@@ -27,13 +29,16 @@ export const Messenger = () => {
                     id: docSnap.id,
                     ...data,
                 } as Chat);
-            } else {
-                console.log('Чат не найден');
             }
         });
 
         return () => unsubscribe();
     }, [chatId]);
+
+    // 2. Получаем ID собеседника (вызываем ДО условного рендера)
+    const participantIds = chat ? Object.keys(chat.participants).filter(uid => uid !== user.uid) : [];
+    const partnerId = participantIds[0];
+    const partner = useGetUserById(chat ? partnerId || '' : ''); // Хук вызывается всегда
 
     if (!chat) {
         return <div>Загрузка чата...</div>;
@@ -42,17 +47,28 @@ export const Messenger = () => {
     return (
         <div className={styles.container}>
             <ChatHeader
-                title={chat.type === 'private' ? 'Denis' : ''}
-                onlineStatus={false} // Можно получить из участников
+                title={partner?.username || 'Собеседник'}
+                onlineStatus={partner?.isOnline || false}
                 type={chat.type}
-                participants={Object.keys(chat.participants).map(uid => ({
-                    ChatMember: {
-                        username: '', // Подгружать из коллекции users
-                        isOnline: false,
-                        uid,
-                        profilePicture: '',
-                    },
-                }))}
+                participants={
+                    chat.type === 'group'
+                        ? Object.keys(chat.participants).map(uid => ({
+                            username: '', // Можно подгрузить через useGetUserById в списке
+                            isOnline: false,
+                            uid,
+                            profilePicture: '',
+                        }))
+                        : partner
+                            ? [
+                                {
+                                    username: partner.username,
+                                    isOnline: partner.isOnline,
+                                    uid: partner.uid,
+                                    profilePicture: partner.profilePicture,
+                                },
+                            ]
+                            : []
+                }
             />
             <MessageList chatId={chatId!} />
             <MessageInput chatId={chatId!} currentUserId={user.uid} />

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import classnames from 'classnames';
 
 import { InputProps } from '../../utils/models/input';
 
 import cl from './Input.module.scss';
 
-export const Input: React.FC<InputProps> = ({
+export const Input = forwardRef<HTMLInputElement, InputProps>(({
     onFocus,
     type = 'text',
     label,
@@ -14,11 +14,12 @@ export const Input: React.FC<InputProps> = ({
     min,
     max,
     onChange,
+    onKeyDown,
     size = 'default',
     theme,
     classNames,
     disabled,
-}) => {
+}, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
     };
@@ -33,6 +34,7 @@ export const Input: React.FC<InputProps> = ({
             }
             <div className={cl['input-wrapper']}>
                 <input
+                    ref={ref}
                     type={type}
                     min={min || undefined}
                     max={max || undefined}
@@ -40,10 +42,13 @@ export const Input: React.FC<InputProps> = ({
                     placeholder={placeholder}
                     value={value}
                     onChange={handleChange}
+                    onKeyDown={onKeyDown}
                     onFocus={onFocus}
                     disabled={disabled}
                 />
             </div>
         </div>
     );
-};
+});
+
+Input.displayName = 'Input';
