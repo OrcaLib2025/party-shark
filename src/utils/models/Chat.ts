@@ -20,9 +20,18 @@ export interface UserChatData {
 export interface ChatMember {
     username: string;
     isOnline?: boolean;
-    uid: string; // Изменено с number на string (Firebase использует строковые ID)
+    uid: string;
     profilePicture?: string;
+    email?: string;
 }
+
+export interface User {
+    profilePicture?: string | undefined;
+    username: string;
+    uid: string;
+    blocked: [];
+    email: string;
+};
 
 // Основная информация о чате (документ в chats коллекции)
 export interface Chat {
@@ -32,7 +41,7 @@ export interface Chat {
     isGroupChat: boolean;
     type: 'private' | 'group' | 'event'; // 'all' убрано - это только для фильтрации
     lastMessage?: LastMessage;
-    participants: Record<string, boolean>; // { userId: true } - как в вашей Firebase структуре
+    participants: ChatMember[]; // { userId: true } - как в вашей Firebase структуре
 }
 
 // Элемент списка чатов (для ChatList)

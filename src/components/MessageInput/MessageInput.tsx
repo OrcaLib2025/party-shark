@@ -19,6 +19,7 @@ export const MessageInput = ({ chatId, currentUserId }: MessageInputProps) => {
     const [inputValue, setInputValue] = useState('');
     const [isEmojiOpen, setIsEmojiOpen] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleSendMessage = async () => {
         if (!inputValue.trim() || !chatId) return;
@@ -29,7 +30,7 @@ export const MessageInput = ({ chatId, currentUserId }: MessageInputProps) => {
                 text: inputValue,
                 senderId: currentUserId,
                 timestamp: serverTimestamp(),
-                image: null, // Можно добавить загрузку изображений
+                image: null,
             });
 
             // Обновляем lastMessage в основном документе чата
@@ -42,6 +43,7 @@ export const MessageInput = ({ chatId, currentUserId }: MessageInputProps) => {
             });
 
             setInputValue('');
+            setIsEmojiOpen(false);
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -49,6 +51,14 @@ export const MessageInput = ({ chatId, currentUserId }: MessageInputProps) => {
 
     const handleEmoji = (e: EmojiClickData) => {
         setInputValue(prev => prev + e.emoji);
+        inputRef.current?.focus();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
     };
 
     useEffect(() => {
@@ -81,9 +91,11 @@ export const MessageInput = ({ chatId, currentUserId }: MessageInputProps) => {
                 placeholder="Напишите сообщение..."
                 aria-label="Поле ввода сообщения"
                 onChange={(value) => setInputValue(value)}
+                onKeyDown={handleKeyDown}
                 theme="light"
                 size="large"
                 value={inputValue}
+                ref={inputRef}
             />
 
             <div className={styles.emojiContainer} ref={emojiPickerRef}>

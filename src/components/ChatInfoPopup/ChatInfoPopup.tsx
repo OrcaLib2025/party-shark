@@ -7,9 +7,7 @@ import styles from './ChatInfoPopup.module.scss';
 
 interface IChatInfoPopup {
   title: string;
-  participants: {
-    ChatMember: ChatMember;
-  }[];
+  participants: ChatMember[];
   images: string[];
   onClose: () => void;
 }
@@ -25,6 +23,10 @@ export const ChatInfoPopup = ({
     const [viewMode, setViewMode] = useState<ViewMode>('menu');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const popupRef = useRef<HTMLDivElement>(null);
+
+    const getInitial = (username: string) => {
+        return username?.charAt(0).toUpperCase() || 'U';
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -82,10 +84,35 @@ export const ChatInfoPopup = ({
                                 </div>
                                 <div className={styles.participantsList}>
                                     {participants.map((user) => (
-                                        <div key={user.ChatMember.uid} className={styles.participant}>
-                                            <img src={user.ChatMember.profilePicture} alt={user.ChatMember.username} />
-                                            <span>{user.ChatMember.username}</span>
-                                            {user.ChatMember.isOnline && <div className={styles.onlineDot} />}
+                                        <div key={user.uid} className={styles.participant}>
+                                            <div className={styles.avatarContainer}>
+                                                {user.profilePicture
+                                                    ? (
+                                                        <img
+                                                            src={user.profilePicture}
+                                                            alt={user.username}
+                                                            className={styles.avatar}
+                                                            onError={(e) => {
+                                                                (e.target as HTMLImageElement).style.display = 'none';
+                                                                // Показываем инициал при ошибке загрузки
+                                                                (e.target as HTMLImageElement)
+                                                                    .nextElementSibling?.classList
+                                                                    .remove(styles.hidden);
+                                                            }}
+                                                        />
+                                                    )
+                                                    : (
+                                                        <div className={styles.avatarPlaceholder}>
+                                                            {getInitial(user.username)}
+                                                        </div>
+                                                    )}
+                                                {/* Fallback инициал (скрытый по умолчанию) */}
+                                                <div className={`${styles.avatarPlaceholder} ${styles.hidden}`}>
+                                                    {getInitial(user.username)}
+                                                </div>
+                                            </div>
+                                            <span className={styles.username}>{user.username}</span>
+                                            {user.isOnline && <div className={styles.onlineDot} />}
                                         </div>
                                     ))}
                                 </div>
@@ -109,7 +136,13 @@ export const ChatInfoPopup = ({
                                             className={styles.imageItem}
                                             onClick={() => setSelectedImage(img)}
                                         >
-                                            <img src={img} alt={`Изображение ${index + 1}`} />
+                                            <img
+                                                src={img}
+                                                alt={`Изображение ${index + 1}`}
+                                                onError={(e) => {
+                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                }}
+                                            />
                                         </div>
                                     ))}
                                 </div>

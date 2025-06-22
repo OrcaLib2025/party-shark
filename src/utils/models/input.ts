@@ -11,5 +11,6 @@ export interface InputProps {
     theme: 'light' | 'dark';
     classNames?: string;
     label?: string;
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     disabled?: boolean;
 }
