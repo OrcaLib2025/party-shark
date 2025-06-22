@@ -7,7 +7,7 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
 } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
@@ -56,14 +56,37 @@ export const Login = () => {
         }
     };
     const handleGoogleSignIn = async () => {
-        signInWithPopup(auth, provider)
-            .then(() => {
-                navigate('/');
-                toast.success('Успешно!');
-            }).catch((error) => {
-                console.log(error);
-                toast.error('Произошла ошибка');
-            });
+        setIsLoading(true);
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            // Проверяем, есть ли запись пользователя в Firestore
+            const userDoc = doc(db, 'users', user.uid);
+            const docSnap = await getDoc(userDoc);
+
+            if (!docSnap.exists()) {
+            // Если записи нет, создаём её
+                await setDoc(userDoc, {
+                    username: user.displayName || user.email?.split('@')[0] || 'User',
+                    email: user.email,
+                    id: user.uid,
+                    blocked: [],
+                    profilePicture: user.photoURL || '',
+                });
+
+                // Создаём запись в userchats
+                await setDoc(doc(db, 'userchats', user.uid), {
+                    chats: [],
+                });
+            }
+
+            navigate('/');
+            toast.success('Успешно!');
+        } catch (error) {
+            console.log(error);
+            toast.error('Произошла ошибка');
+        }
     };
 
     return (
@@ -96,7 +119,7 @@ export const Login = () => {
                 theme="light"
                 onClick={handleGoogleSignIn}
                 disabled={isLoading}
-                text={'Войти с гугла'}
+                text={'Войти, используя Google'}
             />
         </div>
     );

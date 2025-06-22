@@ -33,7 +33,7 @@ export const Authorization: React.FC = () => {
                         onClick={() => setIsLog(!isLog)}
                     >
                         {
-                            isLog ? 'Зарегестрируйся!' : 'Войди!'
+                            isLog ? 'Зарегистрируйся!' : 'Войди!'
                         }
                     </a>
                 </p>
