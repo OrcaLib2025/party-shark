@@ -71,7 +71,7 @@ export const SearchUser = ({ onClose }: { onClose: () => void }) => {
 
             if (!chatSnap.exists()) {
                 await setDoc(chatRef, {
-                    isGroupChat: false,
+                    type: 'private',
                     participants: {
                         [user.uid]: true,
                         [selectedUserId]: true,

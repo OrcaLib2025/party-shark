@@ -88,7 +88,7 @@ function App () {
                         } />
                         <Route path="/map" element={<Suspense><Map /></Suspense>} />
                         <Route path="/groups" element={<Suspense><div>1</div></Suspense>} />
-                        <Route path="/messenger" element={<Suspense><Messenger /></Suspense>} />
+                        <Route path="/messenger/:chatId?" element={<Suspense><Messenger /></Suspense>} />
                         <Route path="/event/:id" element={<Suspense><EventPage /></Suspense>} />
 
                         {user && (

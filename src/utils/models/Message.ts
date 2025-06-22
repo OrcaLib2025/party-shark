@@ -4,6 +4,11 @@ export type Message = {
     senderId: string;
     text: string;
     timestamp?: Timestamp;
+    image?: string;
+    metadata?: {
+        hasPendingWrites: boolean;
+        fromCache: boolean;
+    };
     read?: boolean;
 }
 

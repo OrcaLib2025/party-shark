@@ -9,7 +9,7 @@ import styles from './ChatHeader.module.scss';
 interface ChatHeaderProps {
   title: string;
   onlineStatus: boolean;
-  isGroupChat: boolean;
+  type?: 'private' | 'event' | 'group' | 'all';
   participants: {
     ChatMember: ChatMember
   }[]
@@ -18,7 +18,7 @@ interface ChatHeaderProps {
 export const ChatHeader = ({
     title,
     onlineStatus,
-    isGroupChat,
+    type,
     participants,
     chatImages = [image, avatar],
 }: ChatHeaderProps) => {
@@ -50,7 +50,7 @@ export const ChatHeader = ({
                     {onlineStatus && (
                         <span className={styles.onlineStatus}>Online</span>
                     )}
-                    {isGroupChat && (
+                    {type === 'group' && (
                         <span className={styles.participants}>
                             {getParticipantsText(participantsCount)}
                         </span>

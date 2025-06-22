@@ -2,18 +2,21 @@ import { useState } from 'react';
 
 import styles from './Message.module.scss';
 
-interface IMessage {
+interface IMessageProps {
     message: {
-        id: number;
+        id: string;
         text: string;
         sender: string;
-        timestamp: string;
+        timestamp: string | null;
         isCurrentUser: boolean;
         image?: string | undefined;
+        metadata?: {
+            hasPendingWrites: boolean;
+        };
     };
 }
 
-export const Message: React.FC<IMessage> = ({ message }) => {
+export const Message: React.FC<IMessageProps> = ({ message }) => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     return (
@@ -32,7 +35,12 @@ export const Message: React.FC<IMessage> = ({ message }) => {
                         />
                     )}
                     <div className={styles['message__text']}>{message.text}</div>
-                    <div className={styles['message__time']}>{message.timestamp}</div>
+                    <div className={styles['message__time']}>
+                        {message.timestamp || '…'}
+                        {message.metadata?.hasPendingWrites && (
+                            <span className={styles['sending-indicator']}> • Отправка</span>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -42,7 +50,7 @@ export const Message: React.FC<IMessage> = ({ message }) => {
                         className={styles['message__close-preview']}
                         onClick={() => setSelectedImage(null)}
                     >
-                        <span>×</span>
+                        ×
                     </button>
                     <img src={selectedImage} alt="Просмотр изображения" />
                 </div>

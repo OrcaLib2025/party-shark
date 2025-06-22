@@ -16,10 +16,18 @@ export const ChatItem: React.FC<ChatItemProps> = ({ chatItem, isActive = false, 
             onClick={onClick}
         >
             <div className={styles.avatarWrapper}>
-                <img
-                    className={styles.profileImg}
-                    src={chatItem.profilePicture}
-                    alt='картинка' />
+                {chatItem.profilePicture
+                    ? (
+                        <img
+                            className={styles.profileImg}
+                            src={chatItem.profilePicture}
+                            alt='картинка' />
+                    )
+                    : (
+                        <div className={styles.defaultAvatar}>
+                            {chatItem.sender ? chatItem.sender.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                    )}
                 {chatItem.isOnline && chatItem.type !== 'group' && (
                     <span className={styles.onlineIndicator}></span>
                 )}

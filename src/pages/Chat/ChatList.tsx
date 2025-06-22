@@ -26,8 +26,8 @@ export const ChatList = () => {
         setSearchValue(value);
     };
 
-    const handleMessenger = () => {
-        navigate('/messenger');
+    const handleMessenger = (chatId: string) => {
+        navigate(`/messenger/${chatId}`);
     };
 
     const handleShowSearchUser = () => {
@@ -48,41 +48,68 @@ export const ChatList = () => {
     useEffect(() => {
         if (!user?.uid) return;
 
-        const unSub = onSnapshot(doc(db, 'userchats', user.uid), async (docSnap) => {
-            try {
-                const items = docSnap.data()?.chats || [];
+        const unsub = onSnapshot(doc(db, 'userchats', user.uid), async (docSnap) => {
+            if (!docSnap.exists()) return;
 
-                const promises = items.map(async (item: IChatItem) => {
+            const userChats = docSnap.data().chats;
+            const chatsData: IChatItem[] = [];
+
+            for (const userChat of userChats) {
+                try {
+                    // Получаем основную информацию о чате
+                    const chatDoc = await getDoc(doc(db, 'chats', userChat.chatId));
+                    if (!chatDoc.exists()) continue;
+
+                    const chatData = chatDoc.data();
+                    let chatItem: IChatItem = {
+                        chatId: userChat.chatId,
+                        type: chatData.isGroupChat ? 'group' : 'private',
+                        unreadCount: userChat.unreadCount,
+                        lastMessage: chatData.lastMessage,
+                        isOnline: false,
+                        title: chatData.title || '',
+                        sender: '',
+                    };
+
                     // Для приватных чатов получаем данные собеседника
-                    if (item.type === 'private') {
-                        // Получаем ID собеседника из chatId (формат "uid1_uid2")
-                        const participants = item.chatId.split('_');
+                    if (!chatData.isGroupChat) {
+                        const participants = Object.keys(chatData.participants);
                         const partnerId = participants.find(id => id !== user.uid);
 
                         if (partnerId) {
                             const userDoc = await getDoc(doc(db, 'users', partnerId));
-                            return {
-                                ...item,
-                                sender: userDoc.data()?.username || 'Unknown',
-                                profilePicture: userDoc.data()?.profilePicture,
-                            };
+                            if (userDoc.exists()) {
+                                const userData = userDoc.data();
+                                chatItem = {
+                                    ...chatItem,
+                                    sender: userData.username,
+                                    profilePicture: userData.profilePicture,
+                                    isOnline: userData.isOnline || false,
+                                };
+                            }
                         }
+                    } else {
+                        // Для групповых чатов
+                        chatItem.sender = chatData.title || 'Group Chat';
                     }
-                    return item;
-                });
 
-                const chatData = await Promise.all(promises);
-                setChats(chatData.sort((a, b) =>
-                    (b.lastMessage?.timestamp?.toMillis() || 0) -
-                    (a.lastMessage?.timestamp?.toMillis() || 0),
-                ));
-            } catch (error) {
-                console.error('Error loading chats:', error);
+                    chatsData.push(chatItem);
+                } catch (error) {
+                    console.error('Error loading chat:', userChat.chatId, error);
+                }
             }
+
+            // Сортируем по времени последнего сообщения
+            setChats(chatsData.sort((a, b) =>
+                (b.lastMessage?.timestamp?.toMillis() || 0) -
+                (a.lastMessage?.timestamp?.toMillis() || 0),
+            ));
         });
 
-        return () => unSub();
+        return () => unsub();
     }, [user?.uid]);
+
+    console.log(filteredChats);
 
     return (
         <div className={styles.container}>
@@ -132,7 +159,7 @@ export const ChatList = () => {
                                     key={chat.chatId}
                                     chatItem={chat}
                                     isActive={activeChatId === chat.chatId}
-                                    onClick={handleMessenger}
+                                    onClick={() => handleMessenger(chat.chatId)}
                                 />
                             ))
                         )

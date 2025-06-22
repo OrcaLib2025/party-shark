@@ -46,6 +46,20 @@
     border: 2px solid colors.$blue-light;
 }
 
+.defaultAvatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: colors.$blue-light;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    border: 2px solid colors.$blue-light;
+}
+
 .onlineIndicator {
     position: absolute;
     bottom: 0;
